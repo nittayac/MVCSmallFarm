@@ -1,0 +1,106 @@
+﻿@using MVCSmallFarm.ViewModels;
+@model List<ProductCatViewModel>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" id="linkFirst"
+           data-bs-toggle="tab" role="tab" href="#tabfirst"
+           aria-controls="tabfirst" aria-selected="true">View All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="linkSecond"
+           data-bs-toggle="tab" role="tab" href="#tabsecond"
+           aria-controls="tabsecond" aria-selected="false">Add New</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="tabfirst" class="tab-pane fade show active">
+        @*@await (Component.InvokeAsync<MVCSmallFarm.ViewComponents.ProductAllViewComponent>())*@
+        @await Component.InvokeAsync("ProductAll", new { showPrevious = true, showUpcoming = true })
+    </div>
+
+    <div id="tabsecond" class="tab-pane fade">
+        @*@if (Model != null)
+        {
+            @Html.PartialAsync("PartialAddOrEdit.cshtml", ViewData["Editdata"] as MVCSmallFarm.ViewModels.ProductCatViewModel);
+        }
+        else
+        {
+        <partial name="PartialAddOrEdit.cshtml" />
+        }*@
+
+        @await Component.InvokeAsync("ProductAddEdit", new { showPrevious = true, showUpcoming = ViewBag.ID })
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+
+        async function ReloadEventViewComponent() {
+
+            var chk = 0;
+            var ajaxConfig =  {
+                type: 'GET',
+                url: "@Url.Action("ReloadEventViewComponent", "Product")",
+                data: {
+                    showPrevious: true,
+                    showUpcoming: true
+                },
+                success: function (data) {
+                    $("#tabfirst").html(data);
+                    $('#linkSecond').text('Add New');
+                    chk = 1;
+                }
+            }
+
+            await $.ajax(ajaxConfig);
+            if (chk == 1) {
+                ResetTab(chk);
+            }
+
+        }
+
+        function ReloadProductAddEditViewComponent(id) {
+
+            //alert(id);
+            var chk = 0;
+            ResetTab(chk);
+              var ajaxConfig =  {
+                  type: 'GET',
+                  url: "@Url.Action("ReloadProductAddEditViewComponent", "Product")",
+                  data: {
+                      showPrevious: true,
+                      showUpcoming: id
+                  },
+                  success: function (data) {
+                      $("#tabsecond").html(data);
+                      $('#linkSecond').text('Edit');
+                      chk = 1;
+                     
+                  }
+              }
+           
+            $.ajax(ajaxConfig);
+            if (chk == 1) {
+                ResetTab(chk);
+            }
+            
+        }
+
+        function ResetTab(chk) {
+            if (chk == 1) {
+                document.getElementById("linkFirst").click();
+            } else {
+                document.getElementById("linkSecond").click();
+            }
+        }
+
+
+
+
+    </script>
+
+}

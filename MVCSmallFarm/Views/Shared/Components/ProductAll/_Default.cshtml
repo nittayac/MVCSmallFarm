@@ -1,0 +1,78 @@
+﻿@using MVCSmallFarm.ViewModels;
+@model List<ProductCatViewModel>
+    @{
+    Layout = null;
+    }
+    <div class="container">
+        <div class="card bg-default">
+            <div class="card-body">
+                @*<div class="float-end m-1">
+                    <a class="btn btn-success" asp-controller="Product" asp-action="Index" asp-route-id="0">Add a new product</a>
+                </div>*@
+                <table class="table text-light">
+                    <thead>
+                        <tr>
+                            <th>ProductName</th>
+                            <th>Price</th>
+                            <th>InStock</th>
+                            <th>SoldTotals</th>
+                            <th>IsNormal</th>
+                            <th>IsPromotion</th>
+                            <th>CategoryName</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                <a class="text-danger" asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId">@item.ProductName</a>
+                                @if (@item.IsPromotion != null)
+                                {
+                                <div class="badge bg-danger">Promotion</div>
+                                }
+                            </td>
+                            <td>@item.Price</td>
+                            <td>
+                                @if (@item.InStock > 0)
+                                {
+                                <div class="bg-default">@item.InStock</div>
+                                }
+                                else
+                                {
+                                <div class="bg-danger">0</div>
+                                }
+                            </td>
+                            <td>@item.SoldTotals</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsNormal)
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.IsPromotion)</td>
+                            <td>@item.CategoryName</td>
+                            <td><a class="btn btn-info" asp-controller="Product" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a></td>
+
+                        </tr>
+                        }
+                        }
+                        else
+                        {
+                        <tr>
+                            <td>ProductName</td>
+                            <td>Price</td>
+                            <td>InStock</td>
+                            <td>SoldTotals</td>
+                            <td>IsNormal</td>
+                            <td>IsPromotion</td>
+                            <td>CategoryName</td>
+                            <td></td>
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
