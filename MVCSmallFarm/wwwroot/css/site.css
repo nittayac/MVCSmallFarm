@@ -20,3 +20,30 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('img/Duck.gif') 50% 50% no-repeat rgb(249,249,249);
+    opacity: .8;
+}
+
+
+#hideDiv {
+    background: red;
+    width: 400px;
+    margin: 0 auto;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+div.image:before {
+    width: 200px;
+    content: url('img/Plant.gif');
+    text-align: center;
+}

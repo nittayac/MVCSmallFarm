@@ -9,15 +9,15 @@ public partial class ProductWithComment
 
     public int RunningNumber { get; set; }
 
-    public string UserId { get; set; } = null!;
+    public string UserId { get; set; }
 
     public DateTime CommentDate { get; set; }
 
-    public string Comment { get; set; } = null!;
+    public string Comment { get; set; }
 
-    public string UserIp { get; set; } = null!;
+    public string UserIp { get; set; }
 
     public bool IsShow { get; set; }
 
-    public virtual Product Product { get; set; } = null!;
+    public virtual Product Product { get; set; }
 }

@@ -7,11 +7,11 @@ public partial class Product
 {
     public int ProductId { get; set; }
 
-    public string ProductName { get; set; } = null!;
+    public string ProductName { get; set; }
 
-    public string? Description { get; set; }
+    public string Description { get; set; }
 
-    public string? ImageUrl { get; set; }
+    public string ImageUrl { get; set; }
 
     public int CategoryId { get; set; }
 
@@ -47,7 +47,11 @@ public partial class Product
 
     public bool IsPromotion { get; set; }
 
-    public virtual Category Category { get; set; } = null!;
+    public DateTime? CreateDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public virtual Category Category { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 

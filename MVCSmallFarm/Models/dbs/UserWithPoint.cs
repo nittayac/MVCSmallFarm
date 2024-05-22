@@ -5,7 +5,7 @@ namespace MVCSmallFarm.Models.dbs;
 
 public partial class UserWithPoint
 {
-    public string UserId { get; set; } = null!;
+    public string UserId { get; set; }
 
     public int ProductId { get; set; }
 
@@ -13,7 +13,7 @@ public partial class UserWithPoint
 
     public int Point { get; set; }
 
-    public string UserIp { get; set; } = null!;
+    public string UserIp { get; set; }
 
-    public virtual Product Product { get; set; } = null!;
+    public virtual Product Product { get; set; }
 }

@@ -5,13 +5,13 @@ namespace MVCSmallFarm.Models.dbs;
 
 public partial class Order
 {
-    public string OrderId { get; set; } = null!;
+    public string OrderId { get; set; }
 
-    public string? UserId { get; set; }
+    public string UserId { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string Email { get; set; }
 
-    public string? OrderNo { get; set; }
+    public string OrderNo { get; set; }
 
     public DateTime OrderDate { get; set; }
 
@@ -33,7 +33,7 @@ public partial class Order
 
     public bool IsNormal { get; set; }
 
-    public string UserIp { get; set; } = null!;
+    public string UserIp { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

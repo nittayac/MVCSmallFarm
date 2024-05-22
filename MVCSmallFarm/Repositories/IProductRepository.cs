@@ -1,4 +1,5 @@
-﻿using MVCSmallFarm.ViewModels;
+﻿using MVCSmallFarm.ViewComponents;
+using MVCSmallFarm.ViewModels;
 
 namespace MVCSmallFarm.Repositories
 {
@@ -6,7 +7,10 @@ namespace MVCSmallFarm.Repositories
     {
         Task<List<ProductCatViewModel?>> GetAllProduct();
         Task<ProductCatViewModel> GetAllProductById(int? id);
-        void CreateProduct(ProductCatViewModel data, IFormFile files);
+        Task<List<ErrorsMsg>> CreateProduct(ProductCatViewModel data, IFormFile files);
+        Task<List<ErrorsMsg>> UpdateProduct(ProductCatViewModel pc, IFormFile files);
+        Task<List<ErrorsMsg>> DeleteProduct(int id);
+
     }
 }
 
