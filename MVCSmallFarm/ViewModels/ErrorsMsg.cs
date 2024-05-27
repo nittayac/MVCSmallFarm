@@ -1,4 +1,4 @@
-﻿namespace MVCSmallFarm.ViewComponents
+﻿namespace MVCSmallFarm.ViewModels
 {
     public class ErrorsMsg
     {

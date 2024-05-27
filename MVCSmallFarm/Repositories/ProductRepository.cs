@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.Linq;
-using MVCSmallFarm.ViewComponents;
 using Microsoft.Extensions.Internal;
 using System.Collections.Generic;
 using System.Globalization;
@@ -55,39 +54,53 @@ namespace MVCSmallFarm.Repositories
         public async Task<ProductCatViewModel> GetAllProductById(int? id)
         {
 
+            try
+            {
+                var p = await (from pd in _db.Products
+                               from c in _db.Categories
+                               where pd.CategoryId == c.CategoryId
+                               && (pd.ProductId == id)
+                               select new ProductCatViewModel
+                               {
+                                   ProductId = pd.ProductId,
+                                   ProductName = pd.ProductName,
+                                   Description = pd.Description,
+                                   ImageUrl = string.IsNullOrEmpty(pd.ImageUrl) ? "" : pd.ImageUrl,
+                                   CategoryId = c.CategoryId,
+                                   Cost = pd.Cost,
+                                   Price = (pd.Price == null ? 0 : (decimal)pd.Price),
+                                   InStock = (pd.InStock == null ? 0 : (int)pd.InStock),
+                                   SoldTotals = (pd.SoldTotals == null ? 0 : (int)pd.SoldTotals),
+                                   ViewTotals = (pd.ViewTotals == null ? 0 : (int)pd.ViewTotals),
+                                   ShipDateDuration = (pd.ShipDateDuration == null ? 0 : (int)pd.ShipDateDuration),
+                                   OnePoint = (pd.OnePoint == null ? 0 : (int)pd.OnePoint),
+                                   TwoPoint = (pd.TwoPoint == null ? 0 : (int)pd.TwoPoint),
+                                   ThreePoint = (pd.ThreePoint == null ? 0 : (int)pd.ThreePoint),
+                                   FourPoint = (pd.FourPoint == null ? 0 : (int)pd.FourPoint),
+                                   FivePoint = (pd.FivePoint == null ? 0 : (int)pd.FivePoint),
+                                   PointTotals = (pd.PointTotals == null ? 0 : (int)pd.PointTotals),
+                                   CommentTotals = (pd.CommentTotals == null ? 0 : (int)pd.CommentTotals),
+                                   AveragePoint = (pd.AveragePoint == null ? 0 : (int)pd.AveragePoint),
+                                   IsNormal = pd.IsNormal,
+                                   IsPromotion = pd.IsPromotion,
+                                   CategoryName = c.CategoryName
+                                
+                               }).FirstOrDefaultAsync();
 
-            var p = await(from pd in _db.Products
-                          from c in _db.Categories
-                          where pd.CategoryId == c.CategoryId
-                          && (pd.ProductId == id)
-                          select new ProductCatViewModel
-                          {
-                              ProductId = pd.ProductId,
-                              ProductName = pd.ProductName,
-                              Description = pd.Description,
-                              ImageUrl = string.IsNullOrEmpty(pd.ImageUrl) ? null: pd.ImageUrl,
-                              CategoryId = c.CategoryId,
-                              Cost = pd.Cost,
-                              Price = (pd.Price == null ? 0 : (decimal)pd.Price),
-                              InStock = (pd.InStock == null ? 0 : (int)pd.InStock),
-                              SoldTotals = (pd.SoldTotals == null ? 0 : (int)pd.SoldTotals),
-                              ViewTotals = (pd.ViewTotals == null ? 0 : (int)pd.ViewTotals),
-                              ShipDateDuration = (pd.ShipDateDuration == null ? 0 : (int)pd.ShipDateDuration),
-                              OnePoint = (pd.OnePoint == null ? 0 : (int)pd.OnePoint),
-                              TwoPoint = (pd.TwoPoint == null ? 0 : (int)pd.TwoPoint),
-                              ThreePoint = (pd.ThreePoint == null ? 0 : (int)pd.ThreePoint),
-                              FourPoint = (pd.FourPoint == null ? 0 : (int)pd.FourPoint),
-                              FivePoint = (pd.FivePoint == null ? 0 : (int)pd.FivePoint),
-                              PointTotals = (pd.PointTotals == null ? 0 : (int)pd.PointTotals),
-                              CommentTotals = (pd.CommentTotals == null ? 0 : (int)pd.CommentTotals),
-                              AveragePoint = (pd.AveragePoint == null ? 0 : (int)pd.AveragePoint),
-                              IsNormal = pd.IsNormal,
-                              IsPromotion = pd.IsPromotion,
-                              CategoryName = c.CategoryName
+                var fileUpload = string.IsNullOrEmpty(p.ImageUrl) ? null : ToIFormFile(p.ImageUrl);
 
-                          }).FirstOrDefaultAsync();
+                p.fileUpload = fileUpload;
 
-            return p;
+                return p;
+            }
+            catch(Exception ex)
+            {
+                ProductCatViewModel p = new ProductCatViewModel();
+                return p;
+
+
+            }
+            //return p;
         }
 
         public async Task<List<ErrorsMsg>> CreateProduct(ProductCatViewModel data, IFormFile files)
@@ -172,6 +185,7 @@ namespace MVCSmallFarm.Repositories
                         if (files != null)
                         {
                             p.ImageUrl = ImgPath(files);
+                          
                         }
 
 
@@ -273,6 +287,20 @@ namespace MVCSmallFarm.Repositories
             return chk;
         }
 
+        public IFormFile ToIFormFile(string newFileName) {
+
+            var filepath = new PhysicalFileProvider(
+                     Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img")
+                     ).Root + $@"{newFileName}";
+
+            using FileStream stream = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Read);
+            IFormFile formFile = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name))
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = "image/*"
+            };
+            return formFile;
+        }
 
     }
 }

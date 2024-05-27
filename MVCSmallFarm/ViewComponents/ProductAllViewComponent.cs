@@ -24,34 +24,10 @@ public class ProductAllViewComponent :  ViewComponent
     public async Task<IViewComponentResult> InvokeAsync(int pgview, int flg,ProductCatViewModel pc)
     {
 
-        if (pgview == 1)  //ViewAll
-        {
-            ViewData["Events"] = await _prdrepo.GetAllProduct();
-            return View("ProductAllView");
-        }
-        else if (pgview == 2)
-        {
-            ProductCatViewModel pd = new();
-            if (flg == 0) //Add
-            {
-                //pd.CategoryId = 0;
-                //pd.IsPromotion = true;
-                ViewData["Category"] = new SelectList(await _catrepo.GetAllCategory(), "CategoryId", "CategoryName");
-            }
-            else if (flg == 1) //Edit
-            {
-                pd = await _prdrepo.GetAllProductById(flg);
-                ViewData["Category"] = new SelectList(await _catrepo.GetAllCategory(), "CategoryId", "CategoryName", pd.CategoryId);
-            }
-
-            return View("ProductAddEditView", pd);
-
-        }
-
-        return View("ProductAddEditView", pc);
-
-
-
+            var pd = await _prdrepo.GetAllProduct();
+           // ViewData["Events"] = pd;
+            return View("ProductAllView",pd.ToList());
+   
     }
 
 }

@@ -13,38 +13,40 @@
     </li>
 </ul>
 
-
-<div id="gfg" class="image"><div id="loadmsg"></div></div>
-
-<div id="dialog-confirm"></div>
-
-
-<div class="tab-content">
-    <div id="tabfirst" class="tab-pane fade show active">
-        @*@await (Component.InvokeAsync<MVCSmallFarm.ViewComponents.ProductAllViewComponent>())*@
-        @await Component.InvokeAsync("ProductAll", new { pgview = 1, flg = 1, Model })
-    </div>
-
-    <div id="tabsecond" class="tab-pane fade">
-
-        @*@Html.PartialAsync("PartialAddOrEdit", Model)*@
-
-        @*//@Html.PartialAsync("PartialAddOrEdit", Model)
-
-         // @Html.Partial("PartialAddOrEdit", Model)
-        <partial name="PartialAddOrEdit.cshtml" ,Model/>*@
-        @await Component.InvokeAsync("ProductAll", new { pgview = 2, flg = ViewBag.ID, Model })
-    </div>
+<div id="gfg" class="row">
+    <div class="col-md-3"><div class="image"></div></div>
+    <div class="col-md-9" id="loadmsg"></div>
 </div>
 
-@section Scripts
+
+
+        <div id="dialog-confirm"></div>
+
+
+        <div class="tab-content">
+            <div id="tabfirst" class="tab-pane fade show active">
+                @*@await (Component.InvokeAsync<MVCSmallFarm.ViewComponents.ProductAllViewComponent>())*@
+                @await Component.InvokeAsync("ProductAll", new { pgview = 1, flg = 1, Model })
+            </div>
+
+            <div id="tabsecond" class="tab-pane fade">
+
+                <partial name="ProductAddEditView.cshtml" />
+
+                @*@Html.Partial("PartialAddOrEdit", Model)*@
+                @*@await Component.InvokeAsync("ProductAll", new { pgview = 2, flg = ViewBag.ID, Model })*@
+
+            </div>
+        </div>
+
+        @section Scripts
 {
-    @{
-        <partial name="_ValidationScriptsPartial" />
-    }
-    <script>
+            @{
+                <partial name="_ValidationScriptsPartial" />
+            }
+            <script>
         jQuery(document).ready(function ($) {
-         /*  Loading(false);*/
+            Loading(false);
         });
 
         function Loading(bools) {
@@ -83,14 +85,13 @@
         }
 
         async function ReloadProductAddEditViewComponent(id,edit) {
-            //alert(edit);
             if (edit.toLowerCase() == 'edit') {
                 ResetTab(2);
             }
 
               var ajaxConfig =  {
                   type: 'GET',
-                  url: "@Url.Action("ReloadProductAddEditViewComponent", "Product")",
+                  url: "@Url.Action("ProductAddEditView", "Product")",
                   data: {
                       pgview: 2,
                       flg: id
@@ -182,10 +183,12 @@
 
     function OpenBusyDialog(chk,msg)
     {
+        //var theDialog = $("#gfg").dialog(opt);
+        //theDialog.dialog("open");
+
         if (chk == 1) {
             $("#loadmsg").text(msg);
             $("#gfg").dialog("open");
-            // $(".ui-dialog-titlebar").hide();
         } else {
             $("#loadmsg").text();
             $("#gfg").dialog("close");
@@ -199,20 +202,7 @@
             $.validator.unobtrusive.parse(form);
             console.log("SubmitForm start validate");
 
-            var validator = $(form).validate();
-            var anyError = false;
-
-            form.find("input").each(function () {
-                if (!validator.element(this)) { // validate every input element inside this step
-                    anyError = true;
-                }
-            });
-
-            /*if ($(form).valid()) {*/
-            if (anyError) {
-                //var file = $('#fileUpload').prop("files")[0];
-                //form.append('fileUpload', file);
-
+            if ($(form).valid()) {
 
                 var ajaxConfig = {
                     type: 'POST',
@@ -222,7 +212,7 @@
                     //dataType: "html",
                     success: function (response) {
                         if (response.success) {
-                            OpenBusyDialog(1, "       Saving........Please wait.");
+                            OpenBusyDialog(1, "       Saving <br> Please wait.");
 
                             setTimeout(
                                 function () {
@@ -233,12 +223,14 @@
 
                             OpenBusyDialog(0, "");
                         } else {
-
+                            //$.validator.unobtrusive.parse(form);
+                            /*$("#tabsecond").html(response.FormData);*/
                             $("#tabsecond").html(response);
+                           // $("#imgpreview").attr('src', 'data:image/png,image/jpeg;base64,' + response);
                         };
                     },
                     error: function (error) {
-                        // console.error(error);
+                        console.error(error);
                     }
                 }
 
@@ -253,7 +245,6 @@
         }
 
 
+            </script>
 
-    </script>
-
-}
+        }

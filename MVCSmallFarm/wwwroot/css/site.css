@@ -43,7 +43,23 @@ body {
 }
 
 div.image:before {
-    width: 200px;
     content: url('img/Plant.gif');
-    text-align: center;
+    text-align: left;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    height: 50px;
+    margin-top: -25px;
+}
+#loadmsg {
+    padding-bottom: 60%;
+    text-align: right;
+    font-size: 0.8em;
+}
+
+#gfg {
+    width: 400px;
+    height: 60px;
 }

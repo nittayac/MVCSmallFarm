@@ -1,5 +1,4 @@
-﻿using MVCSmallFarm.ViewComponents;
-using MVCSmallFarm.ViewModels;
+﻿using MVCSmallFarm.ViewModels;
 
 namespace MVCSmallFarm.Repositories
 {

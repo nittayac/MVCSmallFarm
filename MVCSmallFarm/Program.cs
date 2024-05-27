@@ -25,6 +25,9 @@ builder.Services.AddDbContext<SmallFarmContext>(
 //      });
 
 
+builder.Services.AddMemoryCache();  //Using session
+builder.Services.AddSession();      //Using session
+
 builder.Services.AddMvc().AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
 
@@ -54,6 +57,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession(); //Using session ::must call before app.MapControllerRoute
 
 app.MapControllerRoute(
     name: "default",

@@ -1,9 +1,10 @@
-﻿@*@using MVCSmallFarm.ViewModels;
-    @model List<ProductCatViewModel>*@
-@model MVCSmallFarm.ViewModels.ProductCatViewModel
+﻿@using MVCSmallFarm.ViewModels;
+    @model List<ProductCatViewModel>
+@*@model MVCSmallFarm.ViewModels.ProductCatViewModel*@
 
 @{
-    List<MVCSmallFarm.ViewModels.ProductCatViewModel> events = ViewData["Events"] as List<MVCSmallFarm.ViewModels.ProductCatViewModel>;
+    //List<MVCSmallFarm.ViewModels.ProductCatViewModel> events = ViewData["Events"] as List<MVCSmallFarm.ViewModels.ProductCatViewModel>;
+    List<MVCSmallFarm.ViewModels.ProductCatViewModel> events =Model;
     if (events.Count > 0 && events != null)
     {
         <table class="table text-light">
