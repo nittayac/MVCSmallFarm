@@ -4,26 +4,40 @@
 @if (Model != null)
 {
     // ViewData["ImgUrl"] = Url.Content(Model.ImageUrl);
-    if (string.IsNullOrEmpty(Model.ImageUrl))
-    {
-        ViewData["ImgUrl"] = "wwwroot/img/productnopic.png";
-    }
-    else
-    {
-        //ViewData["ImgUrl"] = "wwwroot/img/" + Model.ImageUrl;
-        ViewData["ImgUrl"] = Url.Content("~/img/" + Model.ImageUrl);
-    }
+    if(ViewData["ImgUrl"] == null) {
+        if (Model.ImageUrl == null)
+        {
 
-
+            ViewData["ImgUrl"] = "wwwroot/img/productnopic.png";
+        }
+        else
+        {
+            //ViewData["ImgUrl"] = "wwwroot/img/" + Model.ImageUrl;
+            ViewData["ImgUrl"] = Url.Content("~/img/" + Model.ImageUrl);
+        }
+    }
+   
 }
 else
 {
     ViewData["ImgUrl"] = "wwwroot/img/productnopic.png";
+
 }
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+<input type="hidden" id="RequestVerificationToken"
+       name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
 <h4>Partial Component ProductCatViewModel</h4>
 <hr />
 <div id="response"></div>
-@using (Html.BeginForm("PartialAddOrEdit", "Product", FormMethod.Post, new { id = "frm", enctype = "multipart/form-data", onSubmit = "return SubmitForm(this);" }))
+@using (Html.BeginForm("ProductAddEditView", "Product", FormMethod.Post, new { id = "frm", enctype = "multipart/form-data", onSubmit = "return SubmitForm(this);" }))
 {
 
     @Html.AntiForgeryToken()
@@ -34,7 +48,7 @@ else
             <div class="form-group">
                 <label asp-for="ImageUrl" class="control-label"></label>
                 <img src="@ViewData["ImgUrl"]" style="margin:10px" height="200" width="200" id="imgpreview" />
-                <input id="fileUpload" asp-for="fileUpload" type="file" accept="image/png,image/jpeg" onchange="ShowImagePreview(this,document.getElementById('imgpreview'))" />
+                <input id="fileUpload" asp-for="fileUpload"  type="file" accept="image/png,image/jpeg" onchange="ShowImagePreview(this,document.getElementById('imgpreview'))" />
                 @*<span asp-validation-for="ImageUrl" class="text-danger"></span>*@
             </div>
         </div>
@@ -94,6 +108,8 @@ else
             </div>
             @if (Model != null)
             {
+               @if (Model.ProductId != 0)
+               {
                 <div id="div_prdstar">
                     <div class="form-group">
                         <label asp-for="OnePoint" class="control-label">1 Star</label>
@@ -126,7 +142,8 @@ else
                         <span asp-validation-for="PointTotals" class="text-danger"></span>
                     </div>
                 </div>
-            }
+                   }
+               }
             <div class="form-group">
                 <label asp-for="CommentTotals" class="control-label">Total comments</label>
                 <input asp-for="CommentTotals" class="form-control" />
@@ -171,64 +188,6 @@ else
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        // (view componentin tabsecond):Shared/Components/ProductAll/ProductAddEditView.cshtml  (A Form calls SubmitForm() and jQueryAjaxReset())
-        function SubmitForm(form) {
-
-            $.validator.unobtrusive.parse(form);
-            console.log("SubmitForm start validate");
-
-            var validator = $(form).validate();
-            var anyError = false;
-
-            form.find("input").each(function () {
-                if (!validator.element(this)) { // validate every input element inside this step
-                    anyError = true;
-                }
-            });
-
-            /*if ($(form).valid()) {*/
-            if (anyError) {
-                //var file = $('#fileUpload').prop("files")[0];
-                //form.append('fileUpload', file);
-
-
-                var ajaxConfig = {
-                    type: 'POST',
-                    url: form.action,
-                    //data: new FormData(form),
-                    data: $(form).serialize(),
-                    dataType: "html",
-                    success: function (response) {
-                        if (response.success) {
-                            OpenBusyDialog(1, "       Saving........Please wait.");
-
-                            setTimeout(
-                                function () {
-                                    ReloadProductAddEditViewComponent(0, "reset");  // Code in View/Product/Index.cshtml
-                                    ReloadEventViewComponent();                     // Code in View/Product/Index.cshtml
-                                }, 2000
-                            );
-
-                            OpenBusyDialog(0, "");
-                        } else {
-
-                            $("#tabsecond").html(response.form);
-                        };
-                    },
-                    error: function (error) {
-                        // console.error(error);
-                    }
-                }
-
-                if ($(form).attr('enctype') == "multipart/form-data") {
-                    ajaxConfig['contentType'] = false;
-                    ajaxConfig['processData'] = false;
-                }
-                $.ajax(ajaxConfig);
-
-            }
-            return false;
-        }
-
+       
     </script>
 }

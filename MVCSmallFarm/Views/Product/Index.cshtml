@@ -1,5 +1,4 @@
-﻿@using MVCSmallFarm.ViewModels;
-@model List<ProductCatViewModel>
+﻿@model MVCSmallFarm.ViewModels.ProductCatViewModel
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
@@ -14,93 +13,238 @@
     </li>
 </ul>
 
-<div class="tab-content">
-    <div id="tabfirst" class="tab-pane fade show active">
-        @*@await (Component.InvokeAsync<MVCSmallFarm.ViewComponents.ProductAllViewComponent>())*@
-        @await Component.InvokeAsync("ProductAll", new { showPrevious = true, showUpcoming = true })
-    </div>
-
-    <div id="tabsecond" class="tab-pane fade">
-        @*@if (Model != null)
-        {
-            @Html.PartialAsync("PartialAddOrEdit.cshtml", ViewData["Editdata"] as MVCSmallFarm.ViewModels.ProductCatViewModel);
-        }
-        else
-        {
-        <partial name="PartialAddOrEdit.cshtml" />
-        }*@
-
-        @await Component.InvokeAsync("ProductAddEdit", new { showPrevious = true, showUpcoming = ViewBag.ID })
-
-    </div>
+<div id="gfg" class="row">
+    <div class="col-md-3"><div class="image"></div></div>
+    <div class="col-md-9" id="loadmsg"></div>
 </div>
 
-@section Scripts
+
+
+        <div id="dialog-confirm"></div>
+
+
+        <div class="tab-content">
+            <div id="tabfirst" class="tab-pane fade show active">
+                @*@await (Component.InvokeAsync<MVCSmallFarm.ViewComponents.ProductAllViewComponent>())*@
+                @await Component.InvokeAsync("ProductAll", new { pgview = 1, flg = 1, Model })
+            </div>
+
+            <div id="tabsecond" class="tab-pane fade">
+
+                <partial name="ProductAddEditView.cshtml" />
+
+                @*@Html.Partial("PartialAddOrEdit", Model)*@
+                @*@await Component.InvokeAsync("ProductAll", new { pgview = 2, flg = ViewBag.ID, Model })*@
+
+            </div>
+        </div>
+
+        @section Scripts
 {
-    <script>
+            @{
+                <partial name="_ValidationScriptsPartial" />
+            }
+            <script>
+        jQuery(document).ready(function ($) {
+            Loading(false);
+        });
 
-        async function ReloadEventViewComponent() {
+        function Loading(bools) {
+            $("#gfg").dialog({
+                autoOpen: bools,
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+            });
+            $(".ui-dialog-titlebar").hide();
+        }
 
+        async  function ReloadEventViewComponent() {
             var chk = 0;
             var ajaxConfig =  {
                 type: 'GET',
                 url: "@Url.Action("ReloadEventViewComponent", "Product")",
                 data: {
-                    showPrevious: true,
-                    showUpcoming: true
+                    pgview: 1,
+                    flg: 1
                 },
                 success: function (data) {
                     $("#tabfirst").html(data);
-                    $('#linkSecond').text('Add New');
-                    chk = 1;
+                    //alert(data);
                 }
             }
 
-            await $.ajax(ajaxConfig);
-            if (chk == 1) {
-                ResetTab(chk);
-            }
+            $.ajax(ajaxConfig);
 
+            await ResetTab(1);
         }
 
-        function ReloadProductAddEditViewComponent(id) {
+        async function ReloadProductAddEditViewComponent(id,edit) {
+            if (edit.toLowerCase() == 'edit') {
+                ResetTab(2);
+            }
 
-            //alert(id);
-            var chk = 0;
-            ResetTab(chk);
               var ajaxConfig =  {
                   type: 'GET',
-                  url: "@Url.Action("ReloadProductAddEditViewComponent", "Product")",
+                  url: "@Url.Action("ProductAddEditView", "Product")",
                   data: {
-                      showPrevious: true,
-                      showUpcoming: id
+                      pgview: 2,
+                      flg: id
                   },
                   success: function (data) {
                       $("#tabsecond").html(data);
-                      $('#linkSecond').text('Edit');
-                      chk = 1;
-                     
                   }
               }
-           
-            $.ajax(ajaxConfig);
-            if (chk == 1) {
-                ResetTab(chk);
+            await $.ajax(ajaxConfig);
+
+            if (edit.toLowerCase() == 'reset') {
+                ResetTab(3);
             }
-            
         }
 
-        function ResetTab(chk) {
+        function ResetTab(chk)
+        {
+            let el_down = document.getElementById("linkSecond");
             if (chk == 1) {
+                //add
+                el_down.innerHTML = "Add new";
                 document.getElementById("linkFirst").click();
-            } else {
+            } else if (chk == 2) {
+                //edit
+                el_down.innerHTML = "Edit";
                 document.getElementById("linkSecond").click();
+            } else {
+                //reset
+                el_down.innerHTML = "Add new";
+                document.getElementById("linkFirst").click();
             }
         }
 
 
 
 
-    </script>
+        // (view componentin tabsecond):Shared/Components/ProductAll/ProductAddEditView.cshtml  (A Form calls SubmitForm() and jQueryAjaxReset())
+        function jQueryAjaxReset() {
 
-}
+            // var validator = $("#frm").validate(); //Not working
+            //validator.resetForm();                //Not working
+            //$(form).reset();                      //Not working
+            //$(form).removeData("validator").removeData("unobtrusiveValidation");
+            ReloadProductAddEditViewComponent(0, "reset");
+        }
+
+
+    function confirmSubmitJQ(id, msg, url,loadmsg) {
+
+        checkfn(function () {
+            //alert('success!');
+            OpenBusyDialog(1, loadmsg);
+            var chk = jQueryAjaxPostByID(id, url);
+            setTimeout(
+                function () {
+                    ReloadEventViewComponent();
+                }, 2000);
+            OpenBusyDialog(0,"");
+
+        }, function () {
+            //alert('failure!');
+        }, msg);
+
+    }
+
+    function checkfn(success, cancel,msg) {
+        $.confirm({
+            title: 'Confirm!',
+            content:msg,
+            buttons: {
+                confirm: function () {
+                    if (success) success();
+                        var self = this;
+                        self.close;
+                },
+                cancel: function () {
+                    //  $.alert('Canceled!');
+                    if (cancel) cancel();
+                        var self = this;
+                        self.close;
+                }
+
+            }
+        });
+
+
+        return true;
+    }
+
+    function OpenBusyDialog(chk,msg)
+    {
+        //var theDialog = $("#gfg").dialog(opt);
+        //theDialog.dialog("open");
+
+        if (chk == 1) {
+            $("#loadmsg").text(msg);
+            $("#gfg").dialog("open");
+        } else {
+            $("#loadmsg").text();
+            $("#gfg").dialog("close");
+        }
+
+    }
+
+        // (view componentin tabsecond):Shared/Components/ProductAll/ProductAddEditView.cshtml  (A Form calls SubmitForm() and jQueryAjaxReset())
+        function SubmitForm(form) {
+
+            $.validator.unobtrusive.parse(form);
+            console.log("SubmitForm start validate");
+
+            if ($(form).valid()) {
+
+                var ajaxConfig = {
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    //data: $(form).serialize(),
+                    //dataType: "html",
+                    success: function (response) {
+                        if (response.success) {
+                            OpenBusyDialog(1, "       Saving <br> Please wait.");
+
+                            setTimeout(
+                                function () {
+                                    ReloadProductAddEditViewComponent(0, "reset");  // Code in View/Product/Index.cshtml
+                                    ReloadEventViewComponent();                     // Code in View/Product/Index.cshtml
+                                }, 2000
+                            );
+
+                            OpenBusyDialog(0, "");
+                        } else {
+                            //$.validator.unobtrusive.parse(form);
+                            /*$("#tabsecond").html(response.FormData);*/
+                            $("#tabsecond").html(response);
+                           // $("#imgpreview").attr('src', 'data:image/png,image/jpeg;base64,' + response);
+                        };
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                }
+
+                if ($(form).attr('enctype') == "multipart/form-data") {
+                    ajaxConfig['contentType'] = false;
+                    ajaxConfig['processData'] = false;
+                }
+                $.ajax(ajaxConfig);
+
+            }
+            return false;
+        }
+
+
+            </script>
+
+        }

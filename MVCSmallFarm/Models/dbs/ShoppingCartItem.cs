@@ -11,7 +11,7 @@ public partial class ShoppingCartItem
 
     public int Amount { get; set; }
 
-    public string ShoppingCartId { get; set; } = null!;
+    public string ShoppingCartId { get; set; }
 
-    public virtual Product Product { get; set; } = null!;
+    public virtual Product Product { get; set; }
 }

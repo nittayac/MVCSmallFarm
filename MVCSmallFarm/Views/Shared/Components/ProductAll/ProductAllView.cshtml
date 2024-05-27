@@ -1,0 +1,66 @@
+﻿@using MVCSmallFarm.ViewModels;
+    @model List<ProductCatViewModel>
+@*@model MVCSmallFarm.ViewModels.ProductCatViewModel*@
+
+@{
+    //List<MVCSmallFarm.ViewModels.ProductCatViewModel> events = ViewData["Events"] as List<MVCSmallFarm.ViewModels.ProductCatViewModel>;
+    List<MVCSmallFarm.ViewModels.ProductCatViewModel> events =Model;
+    if (events.Count > 0 && events != null)
+    {
+        <table class="table text-light">
+            <thead>
+                <tr>
+                    <th>ProductName</th>
+                    <th>Price</th>
+                    <th>InStock</th>
+                    <th>SoldTotals</th>
+                    <th>IsNormal</th>
+                    <th>IsPromotion</th>
+                    <th>CategoryName</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in events)
+                {
+                    <tr>
+                        <td>
+                            <a class="text-danger" asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId">@item.ProductName</a>
+
+                            @if (@item.IsPromotion != false)
+                            {
+                                <div class="badge bg-danger">Promotion</div>
+                            }
+                        </td>
+                        <td>@item.Price</td>
+                        <td>
+                            @if (@item.InStock > 0)
+                            {
+                                <div class="bg-default">@item.InStock</div>
+                            }
+                            else
+                            {
+                                <div class="bg-danger">0</div>
+                            }
+                        </td>
+                        <td>@item.SoldTotals</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsNormal)
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.IsPromotion)</td>
+                        <td>@item.CategoryName</td>
+                        <td>
+                            <a class="btn btn-info" onclick='ReloadProductAddEditViewComponent("@item.ProductId","Edit")'>Edit</a>
+                            <a class="btn btn-info" id="btnDelete" onclick='confirmSubmitJQ("@item.ProductId","Do you want to delete product :@item.ProductName"+"?","/Product/DeleteProduct","       Deleting......\n\nPlease wait")'>Delete</a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+}
+
+<div id="mi-modal" title="Delete Record" style="display: none">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are You Sure?</p>
+</div>

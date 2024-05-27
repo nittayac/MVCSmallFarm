@@ -4,9 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MVCSmallFarm</title>
+
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/jquery-version/confirmbox-ver3.3.4/jquery-confirm.min.css" />
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MVCSmallFarm.styles.css" asp-append-version="true" />
+
 </head>
 <body>
     <header>
@@ -52,6 +59,12 @@
     <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery-img/jquery.resizeImg.js"></script>
+    <script src="~/lib/jquery-img/mobileBUGFix.mini.js"></script>
+    <script src="~/lib/jquery-version/confirmbox-ver3.3.4/jquery-confirm.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/Scripts/Script.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

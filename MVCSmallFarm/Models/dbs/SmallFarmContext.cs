@@ -31,8 +31,6 @@ public partial class SmallFarmContext : DbContext
 
     public virtual DbSet<UserWithPoint> UserWithPoints { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //    => optionsBuilder.UseSqlServer("Server=DESKTOP-VIK7108;Database=SmallFarm;Trusted_Connection=True;TrustServerCertificate=True;");
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         IConfigurationRoot config = new ConfigurationBuilder()
@@ -48,8 +46,12 @@ public partial class SmallFarmContext : DbContext
         {
             entity.ToTable("Category");
 
-            entity.Property(e => e.CategoryName).HasMaxLength(100);
-            entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.CategoryName)
+                .IsRequired()
+                .HasMaxLength(100);
+            entity.Property(e => e.Description)
+                .IsRequired()
+                .HasMaxLength(255);
         });
 
         modelBuilder.Entity<EcommerceSummary>(entity =>
@@ -64,7 +66,9 @@ public partial class SmallFarmContext : DbContext
             entity.Property(e => e.OrderId)
                 .HasMaxLength(100)
                 .HasDefaultValueSql("(newid())");
-            entity.Property(e => e.Email).HasMaxLength(30);
+            entity.Property(e => e.Email)
+                .IsRequired()
+                .HasMaxLength(30);
             entity.Property(e => e.NetDc).HasColumnName("NetDC");
             entity.Property(e => e.NetVat).HasColumnName("NetVAT");
             entity.Property(e => e.OrderDate).HasColumnType("datetime");
@@ -72,7 +76,9 @@ public partial class SmallFarmContext : DbContext
             entity.Property(e => e.PaidDate).HasColumnType("datetime");
             entity.Property(e => e.ReceiveDate).HasColumnType("datetime");
             entity.Property(e => e.UserId).HasMaxLength(50);
-            entity.Property(e => e.UserIp).HasMaxLength(20);
+            entity.Property(e => e.UserIp)
+                .IsRequired()
+                .HasMaxLength(20);
             entity.Property(e => e.Vatrate).HasColumnName("VATRate");
         });
 
@@ -105,11 +111,17 @@ public partial class SmallFarmContext : DbContext
 
             entity.Property(e => e.CommentTotals).HasDefaultValue(0);
             entity.Property(e => e.Cost).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.CreateDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.ImageUrl).HasMaxLength(100);
             entity.Property(e => e.PointTotals).HasDefaultValue(0);
             entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.ProductName).HasMaxLength(100);
+            entity.Property(e => e.ProductName)
+                .IsRequired()
+                .HasMaxLength(100);
+            entity.Property(e => e.UpdateDate).HasColumnType("datetime");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
@@ -123,10 +135,16 @@ public partial class SmallFarmContext : DbContext
 
             entity.ToTable("ProductWithComment");
 
-            entity.Property(e => e.Comment).HasMaxLength(255);
+            entity.Property(e => e.Comment)
+                .IsRequired()
+                .HasMaxLength(255);
             entity.Property(e => e.CommentDate).HasColumnType("datetime");
-            entity.Property(e => e.UserId).HasMaxLength(100);
-            entity.Property(e => e.UserIp).HasMaxLength(50);
+            entity.Property(e => e.UserId)
+                .IsRequired()
+                .HasMaxLength(100);
+            entity.Property(e => e.UserIp)
+                .IsRequired()
+                .HasMaxLength(50);
 
             entity.HasOne(d => d.Product).WithMany(p => p.ProductWithComments)
                 .HasForeignKey(d => d.ProductId)
@@ -138,7 +156,9 @@ public partial class SmallFarmContext : DbContext
         {
             entity.ToTable("ShoppingCartItem");
 
-            entity.Property(e => e.ShoppingCartId).HasMaxLength(50);
+            entity.Property(e => e.ShoppingCartId)
+                .IsRequired()
+                .HasMaxLength(50);
 
             entity.HasOne(d => d.Product).WithMany(p => p.ShoppingCartItems)
                 .HasForeignKey(d => d.ProductId)
@@ -154,7 +174,9 @@ public partial class SmallFarmContext : DbContext
 
             entity.Property(e => e.UserId).HasMaxLength(100);
             entity.Property(e => e.PointDate).HasColumnType("datetime");
-            entity.Property(e => e.UserIp).HasMaxLength(50);
+            entity.Property(e => e.UserIp)
+                .IsRequired()
+                .HasMaxLength(50);
 
             entity.HasOne(d => d.Product).WithMany(p => p.UserWithPoints)
                 .HasForeignKey(d => d.ProductId)

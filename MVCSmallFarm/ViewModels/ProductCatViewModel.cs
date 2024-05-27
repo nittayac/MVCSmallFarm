@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json.Serialization;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using MVCSmallFarm.Common;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace MVCSmallFarm.ViewModels
 {
@@ -18,13 +22,22 @@ namespace MVCSmallFarm.ViewModels
         [Range(1, 1000000, ErrorMessage = "Please choose a category")]
         public int CategoryId { get; set; }
 
+
         public decimal? Cost { get; set; }
 
+        [Required]
+        [Range(1, 1000000, ErrorMessage = "Please enter a price")]
         public decimal? Price { get; set; }
 
+        [Required]
+        [Display(Name = "InStock")]
         [Range(1, 1000000, ErrorMessage = "Please enter a product in stock")]
         public int? InStock { get; set; }
 
+        [Required]
+        [Display(Name = "SoldTotals")]
+        [CompareNumberLessthan(nameof(InStock),ErrorMessage = "SoldTotals  must be less than or equal to InStock value.")]
+        //[Compare("InStocks", ErrorMessage= "The password and confirmation password do not match.")]
         public int? SoldTotals { get; set; }
 
         public int? ViewTotals { get; set; }
