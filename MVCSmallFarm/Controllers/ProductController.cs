@@ -63,10 +63,21 @@ namespace MVCSmallFarm.Controllers
             else
             {
                 var pd = IntialValue();
-              
+                ViewData["Category"] = new SelectList(await _catrepo.GetAllCategory(), "CategoryId", "CategoryName");  //Intitial DropdownList in Product/PartialAddOrEdit.cshtml
                 return PartialView("ProductAddEditView", pd);
             }
         
+        }
+
+        public async Task<ActionResult> Detail(int id) 
+        {
+            var pd = await _prdrepo.GetAllProductById(id);
+
+            if (pd != null)
+            { 
+                pd.ImageUrl = Url.Content("~/img/" + pd.ImageUrl);
+            }
+            return PartialView("_Detail", pd);
         }
 
         //public async Task<JsonResult> ProductAddEditView(ProductCatViewModel pc, IFormFile files)
@@ -110,11 +121,10 @@ namespace MVCSmallFarm.Controllers
             else
             {
                 var imgstr = HttpContext.Session.GetString("imgurl");
-                ViewData["ImgUrl"] = Url.Content("~/img/" + imgstr); 
-                //HttpContext.Session.Remove("imgurl"); 
+                pc.ImageUrl = imgstr;
+                HttpContext.Session.Remove("imgurl"); 
 
                 ViewData["Category"] = new SelectList(await _catrepo.GetAllCategory(), "CategoryId", "CategoryName", pc.CategoryId);
-                // return Json(new { success = false, message = "Model invalid" });
 
                 //return ViewComponent("ProductAll", new { pgview = 3, flg = 0, pc });
 
