@@ -17,36 +17,37 @@
     <div class="col-md-3"><div class="image"></div></div>
     <div class="col-md-9" id="loadmsg"></div>
 </div>
+<div id="dialog-confirm"></div>
 
 
+<div class="tab-content">
+    <div id="tabfirst" class="tab-pane fade show active">
+        @*@await (Component.InvokeAsync<MVCSmallFarm.ViewComponents.ProductAllViewComponent>())*@
+        @await Component.InvokeAsync("ProductAll", new { pgview = 1, flg = 1, Model })
+    </div>
 
-        <div id="dialog-confirm"></div>
+    <div id="tabsecond" class="tab-pane fade">
 
+        <partial name="ProductAddEditView.cshtml" />
 
-        <div class="tab-content">
-            <div id="tabfirst" class="tab-pane fade show active">
-                @*@await (Component.InvokeAsync<MVCSmallFarm.ViewComponents.ProductAllViewComponent>())*@
-                @await Component.InvokeAsync("ProductAll", new { pgview = 1, flg = 1, Model })
-            </div>
+        @*@Html.Partial("PartialAddOrEdit", Model)*@
+        @*@await Component.InvokeAsync("ProductAll", new { pgview = 2, flg = ViewBag.ID, Model })*@
 
-            <div id="tabsecond" class="tab-pane fade">
+    </div>
+</div>
 
-                <partial name="ProductAddEditView.cshtml" />
-
-                @*@Html.Partial("PartialAddOrEdit", Model)*@
-                @*@await Component.InvokeAsync("ProductAll", new { pgview = 2, flg = ViewBag.ID, Model })*@
-
-            </div>
-        </div>
-
-        @section Scripts
+ @section Scripts
 {
-            @{
-                <partial name="_ValidationScriptsPartial" />
-            }
-            <script>
-        jQuery(document).ready(function ($) {
-            Loading(false);
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+<script>
+ 
+    jQuery(document).ready(function () {
+        Loading(false);
+            $('#tblViewAll').DataTable({
+
+            });
         });
 
         function Loading(bools) {
@@ -125,21 +126,7 @@
             }
         }
 
-
-
-
-        // (view componentin tabsecond):Shared/Components/ProductAll/ProductAddEditView.cshtml  (A Form calls SubmitForm() and jQueryAjaxReset())
-        function jQueryAjaxReset() {
-
-            // var validator = $("#frm").validate(); //Not working
-            //validator.resetForm();                //Not working
-            //$(form).reset();                      //Not working
-            //$(form).removeData("validator").removeData("unobtrusiveValidation");
-            ReloadProductAddEditViewComponent(0, "reset");
-        }
-
-
-    function confirmSubmitJQ(id, msg, url,loadmsg) {
+    function confirmSubmitJQ(id, msg, url, loadmsg) {
 
         checkfn(function () {
             //alert('success!');
@@ -149,7 +136,7 @@
                 function () {
                     ReloadEventViewComponent();
                 }, 2000);
-            OpenBusyDialog(0,"");
+            OpenBusyDialog(0, "");
 
         }, function () {
             //alert('failure!');
@@ -157,21 +144,21 @@
 
     }
 
-    function checkfn(success, cancel,msg) {
+    function checkfn(success, cancel, msg) {
         $.confirm({
             title: 'Confirm!',
-            content:msg,
+            content: msg,
             buttons: {
                 confirm: function () {
                     if (success) success();
-                        var self = this;
-                        self.close;
+                    var self = this;
+                    self.close;
                 },
                 cancel: function () {
                     //  $.alert('Canceled!');
                     if (cancel) cancel();
-                        var self = this;
-                        self.close;
+                    var self = this;
+                    self.close;
                 }
 
             }
@@ -181,70 +168,162 @@
         return true;
     }
 
-    function OpenBusyDialog(chk,msg)
-    {
+    function OpenBusyDialog(chk, msg) {
         //var theDialog = $("#gfg").dialog(opt);
         //theDialog.dialog("open");
 
         if (chk == 1) {
-            $("#loadmsg").text(msg);
+            $("#loadmsg").html(msg);
             $("#gfg").dialog("open");
         } else {
-            $("#loadmsg").text();
+            $("#loadmsg").html();
             $("#gfg").dialog("close");
         }
 
     }
 
-        // (view componentin tabsecond):Shared/Components/ProductAll/ProductAddEditView.cshtml  (A Form calls SubmitForm() and jQueryAjaxReset())
-        function SubmitForm(form) {
 
-            $.validator.unobtrusive.parse(form);
-            console.log("SubmitForm start validate");
+    //for a form in Product/ProductAddEdit.cshtml
+    function jQueryAjaxReset() {
 
-            if ($(form).valid()) {
+        // var validator = $("#frm").validate(); //Not working
+        //validator.resetForm();                //Not working
+        //$(form).reset();                      //Not working
+        //$(form).removeData("validator").removeData("unobtrusiveValidation");
+        ReloadProductAddEditViewComponent(0, "reset");
+    }
 
-                var ajaxConfig = {
-                    type: 'POST',
-                    url: form.action,
-                    data: new FormData(form),
-                    //data: $(form).serialize(),
-                    //dataType: "html",
-                    success: function (response) {
-                        if (response.success) {
-                            OpenBusyDialog(1, "       Saving <br> Please wait.");
 
-                            setTimeout(
-                                function () {
-                                    ReloadProductAddEditViewComponent(0, "reset");  // Code in View/Product/Index.cshtml
-                                    ReloadEventViewComponent();                     // Code in View/Product/Index.cshtml
-                                }, 2000
-                            );
+    //Using with SubmitForm() for a form in Product/ProductAddEdit.cshtml
+    function ValidateForm() {
+        var isAllValid = true;
+        //$('.text-danger').hide();
+        //$('#error').empty();  
 
-                            OpenBusyDialog(0, "");
-                        } else {
-                            //$.validator.unobtrusive.parse(form);
-                            /*$("#tabsecond").html(response.FormData);*/
-                            $("#tabsecond").html(response);
-                           // $("#imgpreview").attr('src', 'data:image/png,image/jpeg;base64,' + response);
-                        };
-                    },
-                    error: function (error) {
-                        console.error(error);
-                    }
-                }
+        var instock = parseInt($('#InStock').val().trim());
+        var sold = parseInt($('#SoldTotals').val().trim());
 
-                if ($(form).attr('enctype') == "multipart/form-data") {
-                    ajaxConfig['contentType'] = false;
-                    ajaxConfig['processData'] = false;
-                }
-                $.ajax(ajaxConfig);
+        if (isNaN(sold) == false) {
+            if (Number(instock) < Number(sold)) {
+                $("#SoldTotals").focus();
 
+                //If you want to put the message in the span, then you have to set data - valmsg - replace to false.
+                $("#SoldTotals").siblings('.text-danger').attr("data-valmsg-replace", function (i, val) {
+                    // return val + " - photo by Kelly Clark";
+                    return false;
+                });
+
+                $("#SoldTotals").siblings('.text-danger').show();
+                $("#SoldTotals").siblings('.text-danger').text('Must be less than or equal to an Instock value.');
+                $("#SoldTotals").parents('.form-group').addClass('has-error');
+
+                isAllValid = false;
+            } else {
+
+                $("#SoldTotals").siblings('.text-danger').hide();
+                $("#SoldTotals").siblings('.text-danger').text('');
+
+                //Intitial span
+                $("#SoldTotals").siblings('.text-danger').attr("data-valmsg-replace", function (i, val) {
+                    return true;
+                });
+
+
+                $("#SoldTotals").parents('.form-group').removeClass('has-error');
+                isAllValid = true;
             }
-            return false;
         }
+        else {
+            $("#SoldTotals").siblings('.text-danger').show();
+            console.log('else');
+            isAllValid = false;
+        }
+        return isAllValid;
+    }
 
+    // (view componentin tabsecond):Product/ProductAddEdit.cshtml  (A Form calls)
+    function SubmitForm(form) {
 
-            </script>
+        $.validator.unobtrusive.parse(form);
+        console.log("SubmitForm start validate");
+
+        // debugger; 
+        var chk = ValidateForm();
+        if ($(form).valid() && chk) {
+
+            var ajaxConfig = {
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                //data: $(form).serialize(),
+                //dataType: "html",
+                success: function (response) {
+                    if (response.success) {
+                        OpenBusyDialog(1, "      Saving <br/> Please wait.");
+
+                        setTimeout(
+                            function () {
+                                ReloadProductAddEditViewComponent(0, "reset");  // Code in View/Product/Index.cshtml
+                                ReloadEventViewComponent();                     // Code in View/Product/Index.cshtml
+                            }, 2000
+                        );
+
+                        OpenBusyDialog(0, "");
+                    } else {
+                        //$.validator.unobtrusive.parse(form);
+                        /*$("#tabsecond").html(response.FormData);*/
+                        $("#tabsecond").html(response);
+                        // $("#imgpreview").attr('src', 'data:image/png,image/jpeg;base64,' + response);
+                    };
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            }
+
+            if ($(form).attr('enctype') == "multipart/form-data") {
+                ajaxConfig['contentType'] = false;
+                ajaxConfig['processData'] = false;
+            }
+            $.ajax(ajaxConfig);
 
         }
+        return false;
+    }
+
+
+
+    //For detail button in :Shared/Component/ProductAll/ProductAllView.cshtml
+    function showdetail(id) {
+        var TeamDetailPostBackURL = '/Product/Detail';
+        //$("#btnDetail").on('click', function () {
+        //    var $buttonClicked = $(this);
+        //    var id = $buttonClicked.attr('data-id');
+        var options = { "backdrop": "static", keyboard: true };  
+        $.ajax({
+            type: "GET",
+            url: TeamDetailPostBackURL,
+            contentType: "application/json; charset=utf-8",
+            data: { "Id": id },
+            datatype: "json",
+            success: function (data) {
+                $('.modal-body').html(data);
+                $('#myModal').modal(options);
+                $('#myModal').modal('show');
+            },
+            error: function () {
+                alert("Dynamic content load failed.");
+            }
+        });
+        /* });*/
+
+
+        $(".btn-close").on('click', function () {
+            $('#myModal').modal('hide');
+        });
+
+    }
+ 
+</script>
+
+ }

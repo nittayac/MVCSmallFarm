@@ -63,3 +63,7 @@ div.image:before {
     width: 400px;
     height: 60px;
 }
+.icon {
+    width: 20px;
+    height: 20px;
+}

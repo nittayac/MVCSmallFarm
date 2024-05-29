@@ -6,38 +6,32 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 
 namespace MVCSmallFarm.ViewModels
 {
-    public class ProductCatViewModel
+    public class ProductCatViewModel_1
     {
         [Key]
         public int ProductId { get; set; }
 
-        [Required(ErrorMessage = "Please enter name a productname"), MaxLength(100)]
+
         public string ProductName { get; set; } = null!;
 
         public string? Description { get; set; }
 
         public string? ImageUrl { get; set; }
 
-        [Required]
-        [Range(1, 1000000, ErrorMessage = "Please choose a category")]
+
         public int CategoryId { get; set; }
 
 
         public decimal? Cost { get; set; }
 
-        [Required]
-        [Range(1, 1000000, ErrorMessage = "Please enter a price")]
-        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
+
         public decimal? Price { get; set; }
 
-        [Required]
-        [Display(Name = "InStock")]
-        [Range(1, 1000000, ErrorMessage = "Please enter a product in stock")]
+
         public int? InStock { get; set; }
 
-        [Required(ErrorMessage = "Please enter name a SoldTotals")]
-        [Display(Name = "SoldTotals")]
-        [CompareNumberLessthan(nameof(InStock),ErrorMessage = "SoldTotals  must be less than or equal to InStock value.")]
+
+        //[Compare("InStocks", ErrorMessage= "The password and confirmation password do not match.")]
         public int? SoldTotals { get; set; }
 
         public int? ViewTotals { get; set; }

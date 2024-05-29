@@ -86,108 +86,110 @@ else
             </div>
             <div class="form-group">
                 <label asp-for="InStock" class="control-label">Remain in the stock</label>
-                <input asp-for="InStock" class="form-control" />
+                <input asp-for="InStock" id="InStock" class="form-control" />
                 <span asp-validation-for="InStock" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SoldTotals" class="control-label">Total sold</label>
-                <input asp-for="SoldTotals" class="form-control" />
-                <span asp-validation-for="SoldTotals" class="text-danger"></span>
+                @*<input asp-for="SoldTotals" id="SoldTotals" class="form-control"/>*@
+                <input asp-for="SoldTotals" name ="SoldTotals" id="SoldTotals" class="form-control"
+                    data-val="true"
+                    data-val-required="The SoldTotals is required"
+                    aria-required="true" aria-invalid="true"/>
+                @*<span asp-validation-for="SoldTotals" class="text-danger"></span>*@
+                <span id="spSoldTotals" class="text-danger" asp-validation-for="SoldTotals"  data-valmsg-for="SoldTotals" data-valmsg-replace="true"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ViewTotals" class="control-label">Total views</label>
-                <input asp-for="ViewTotals" class="form-control" />
-                <span asp-validation-for="ViewTotals" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="ShipDateDuration" class="control-label">Delivery(days)</label>
-                <input asp-for="ShipDateDuration" class="form-control" />
-                <span asp-validation-for="ShipDateDuration" class="text-danger"></span>
-            </div>
-            @if (Model != null)
-            {
-               @if (Model.ProductId != 0)
-               {
-                <div id="div_prdstar">
                     <div class="form-group">
-                        <label asp-for="OnePoint" class="control-label">1 Star</label>
-                        <input asp-for="OnePoint" class="form-control" />
-                        <span asp-validation-for="OnePoint" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="TwoPoint" class="control-label">2 Stars</label>
-                        <input asp-for="TwoPoint" class="form-control" />
-                        <span asp-validation-for="TwoPoint" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="ThreePoint" class="control-label">3 Stars</label>
-                        <input asp-for="ThreePoint" class="form-control" />
-                        <span asp-validation-for="ThreePoint" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="FourPoint" class="control-label">4 Stars</label>
-                        <input asp-for="FourPoint" class="form-control" />
-                        <span asp-validation-for="FourPoint" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="FivePoint" class="control-label">5 Stars</label>
-                        <input asp-for="FivePoint" class="form-control" />
-                        <span asp-validation-for="FivePoint" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="PointTotals" class="control-label">Total stars</label>
-                        <input asp-for="PointTotals" class="form-control" />
-                        <span asp-validation-for="PointTotals" class="text-danger"></span>
+                        <label asp-for="ViewTotals" class="control-label">Total views</label>
+                        <input asp-for="ViewTotals" class="form-control" />
+                        <span asp-validation-for="ViewTotals" class="text-danger"></span>
                     </div>
                 </div>
-                   }
-               }
-            <div class="form-group">
-                <label asp-for="CommentTotals" class="control-label">Total comments</label>
-                <input asp-for="CommentTotals" class="form-control" />
-                <span asp-validation-for="CommentTotals" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AveragePoint" class="control-label">Average stars</label>
-                <input asp-for="AveragePoint" class="form-control" />
-                <span asp-validation-for="AveragePoint" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" asp-for="IsNormal" checked /> <label class="form-check-label text-black">Selling</label>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ShipDateDuration" class="control-label">Delivery(days)</label>
+                        <input asp-for="ShipDateDuration" class="form-control" />
+                        <span asp-validation-for="ShipDateDuration" class="text-danger"></span>
+                    </div>
+                    @if (Model != null)
+                    {
+                       @if (Model.ProductId != 0)
+                       {
+                        <div id="div_prdstar">
+                            <div class="form-group">
+                                <label asp-for="OnePoint" class="control-label">1 Star</label>
+                                <input asp-for="OnePoint" class="form-control" />
+                                <span asp-validation-for="OnePoint" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="TwoPoint" class="control-label">2 Stars</label>
+                                <input asp-for="TwoPoint" class="form-control" />
+                                <span asp-validation-for="TwoPoint" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ThreePoint" class="control-label">3 Stars</label>
+                                <input asp-for="ThreePoint" class="form-control" />
+                                <span asp-validation-for="ThreePoint" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="FourPoint" class="control-label">4 Stars</label>
+                                <input asp-for="FourPoint" class="form-control" />
+                                <span asp-validation-for="FourPoint" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="FivePoint" class="control-label">5 Stars</label>
+                                <input asp-for="FivePoint" class="form-control" />
+                                <span asp-validation-for="FivePoint" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PointTotals" class="control-label">Total stars</label>
+                                <input asp-for="PointTotals" class="form-control" />
+                                <span asp-validation-for="PointTotals" class="text-danger"></span>
+                            </div>
+                        </div>
+                           }
+                       }
+                    <div class="form-group">
+                        <label asp-for="CommentTotals" class="control-label">Total comments</label>
+                        <input asp-for="CommentTotals" class="form-control" />
+                        <span asp-validation-for="CommentTotals" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AveragePoint" class="control-label">Average stars</label>
+                        <input asp-for="AveragePoint" class="form-control" />
+                        <span asp-validation-for="AveragePoint" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsNormal" checked /> <label class="form-check-label text-black">Selling</label>
+                        </div>
+                        <div class="form-group form-check">
+                            <input class="form-check-input" type="checkbox" asp-for="IsPromotion" /> <label class="form-check-label text-black">On promption</label>
+
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group form-check">
-                    <input class="form-check-input" type="checkbox" asp-for="IsPromotion" /> <label class="form-check-label text-black">On promption</label>
-
-                </div>
-            </div>
-        </div>
 
 
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-8">
-                <div class="form-group">
-                    <div class="mt-5">
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                        <a class="btn btn-info" onclick="return jQueryAjaxReset(document.getElementById('frm'));">Reset</a>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="mt-5">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                                <a class="btn btn-info" onclick="return jQueryAjaxReset(document.getElementById('frm'));">Reset</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-}
+        }
 
-@*</form>*@
+        @*</form>*@
 
 
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                @section Scripts {
+                    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script>
-       
-    </script>
-}
+                }
