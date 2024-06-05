@@ -1,8 +1,82 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+    @(await Html.RenderComponentAsync<MVCSmallFarm.Components.ProductCatalog>(RenderMode.ServerPrerendered))
+
 </div>
+
+<div id='myModalBrazor' class="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Product Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @*@if (Model != null)
+                    {
+                        <img src="@Model.ImageUrl" style="margin:10px" height="200" width="200" id="imgpreview" />
+                        <p>@Model.ProductName</p>
+                        <p>@Model.Price</p>
+                    }*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script src="~/js/jsBlazor.js"></script>
+    <script>
+        //For detail button in :Shared/Component/ProductAll/ProductAllView.cshtml
+        function showdetail(id, flg) {
+            var TeamDetailPostBackURL = '/Product/Detail';
+            //$("#btnDetail").on('click', function () {
+            //    var $buttonClicked = $(this);
+            //    var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: {
+                    "Id": id,
+                    "flg": flg
+                },
+                datatype: "json",
+                success: function (data) {
+                    $('.modal-body').html(data);
+                    $('#myModalBrazor').modal(options);
+                    $('#myModalBrazor').modal('show');
+
+
+                   /* alert(data);*/
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+            /* });*/
+
+
+            $(".btn-close").on('click', function () {
+                $('#myModalBrazor').modal('hide');
+            });
+
+        }
+
+    </script>
+}

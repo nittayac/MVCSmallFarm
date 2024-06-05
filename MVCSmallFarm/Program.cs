@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using MVCSmallFarm.Models.dbs;
 using MVCSmallFarm.Repositories;
 using Newtonsoft.Json.Serialization;
+using MVCSmallFarm.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,11 +30,13 @@ builder.Services.AddMemoryCache();  //Using session
 builder.Services.AddSession();      //Using session
 
 builder.Services.AddMvc().AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-
+builder.Services.AddSingleton<DBConnector>();   //Using DBConnector (class) in Blazor
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 //builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+builder.Services.AddServerSideBlazor();  //Using Blazor component
 
 var app = builder.Build();
 
@@ -63,5 +66,8 @@ app.UseSession(); //Using session ::must call before app.MapControllerRoute
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+app.MapBlazorHub();    //Using Blazor component
 
 app.Run();
