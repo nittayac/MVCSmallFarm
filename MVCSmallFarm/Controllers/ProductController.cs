@@ -69,15 +69,33 @@ namespace MVCSmallFarm.Controllers
         
         }
 
-        public async Task<ActionResult> Detail(int id) 
+        public async Task<ActionResult> Detail(int id,string flg) 
         {
             var pd = await _prdrepo.GetAllProductById(id);
 
             if (pd != null)
-            { 
+            {
                 pd.ImageUrl = Url.Content("~/img/" + pd.ImageUrl);
+
+                if (pd.ImageUrl == null || pd.ImageUrl.Trim() == "")
+                {
+                    pd.ImageUrl = DefaultValue.DefaultImg;
+                }
+
+
+                if (flg == "nocomment")
+                {
+                    return PartialView("_Detail", pd);
+                }
+                else
+                {
+                    ViewData["ProductDetail"] = pd;
+                    return PartialView("_DetailWithComment", pd);
+                }
             }
-            return PartialView("_Detail", pd);
+            else {
+                return NotFound();
+            }
         }
 
         //public async Task<JsonResult> ProductAddEditView(ProductCatViewModel pc, IFormFile files)

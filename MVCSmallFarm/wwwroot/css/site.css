@@ -67,3 +67,39 @@ div.image:before {
     width: 20px;
     height: 20px;
 }
+
+#product-featured-box {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+}
+
+.card-img-top {
+    /* max-height: 250px;
+    min-height: 250px;*/
+    height: 11vw;
+    width: 11vw;
+    object-fit: cover;
+}
+
+.container-bg {
+    background: white;
+}
+
+
+.noBorder {
+    border: none !important;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/*table.dataTable tr.odd {
+    background-color: white;
+}
+
+
+table.dataTable tr.even {
+    background-color: white;
+}*/

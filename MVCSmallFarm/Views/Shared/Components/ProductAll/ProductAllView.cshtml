@@ -8,7 +8,7 @@
     List<MVCSmallFarm.ViewModels.ProductCatViewModel> events = Model;
     if (events.Count > 0 && events != null)
     {
-        <table class="table text-light"  id="tblViewAll">
+        <table class="table text-light" id="tblViewAll">
             <thead>
                 <tr>
                     <th>ProductName</th>
@@ -51,9 +51,9 @@
                         <td>@Html.DisplayFor(modelItem => item.IsPromotion)</td>
                         <td>@item.CategoryName</td>
                         <td>
-                            <a class="btn btn-outline-primary" title="Edit"  onclick='ReloadProductAddEditViewComponent("@item.ProductId","Edit")'><img class="icon" src="~/css/img/pencil.png" /></a>
+                            <a class="btn btn-outline-primary" title="Edit" onclick='ReloadProductAddEditViewComponent("@item.ProductId","Edit")'><img class="icon" src="~/css/img/pencil.png" /></a>
                             <a class="btn btn-outline-primary" title="Delete" id="btnDelete" onclick='confirmSubmitJQ("@item.ProductId","Do you want to delete product :@item.ProductName"+"?","/Product/DeleteProduct","       Deleting......\n\nPlease wait")'><img class="icon" src="~/css/img/bin.png" /></a>
-                           <a  class="btn btn-outline-primary" title="Product Detail" id="btnDetail" onclick='showdetail("@item.ProductId")'><img class="icon" src="~/css/img/detail.png" /></a>
+                            <a class="btn btn-outline-primary" title="Product Detail" id="btnDetail" onclick='showdetail("@item.ProductId","nocomment")'><img class="icon" src="~/css/img/detail.png" /></a>
                         </td>
                     </tr>
                 }
@@ -64,25 +64,4 @@
 }
 
 
-
-<div id='myModal' class="modal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Product Detail</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="modal-body">
-                @*@if (Model != null)
-                    {
-                        <img src="@Model.ImageUrl" style="margin:10px" height="200" width="200" id="imgpreview" />
-                        <p>@Model.ProductName</p>
-                        <p>@Model.Price</p>
-                    }*@
-            </div>
-        </div>
-    </div>
-</div>
 

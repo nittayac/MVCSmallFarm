@@ -294,7 +294,7 @@
 
 
     //For detail button in :Shared/Component/ProductAll/ProductAllView.cshtml
-    function showdetail(id) {
+    function showdetail(id,flg) {
         var TeamDetailPostBackURL = '/Product/Detail';
         //$("#btnDetail").on('click', function () {
         //    var $buttonClicked = $(this);
@@ -304,7 +304,9 @@
             type: "GET",
             url: TeamDetailPostBackURL,
             contentType: "application/json; charset=utf-8",
-            data: { "Id": id },
+            data: {
+                "Id": id,
+                "flg": flg },
             datatype: "json",
             success: function (data) {
                 $('.modal-body').html(data);

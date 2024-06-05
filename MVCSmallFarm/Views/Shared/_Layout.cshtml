@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MVCSmallFarm.styles.css" asp-append-version="true" />
 
+
 </head>
 <body>
     <header>
@@ -67,8 +68,18 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
+    <script src="~/lib/Pagination.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/Scripts/Script.js"></script>
+
+    <script src="_framework/blazor.server.js"></script>
+
+
+
     @await RenderSectionAsync("Scripts", required: false)
+
+
+
+
 </body>
 </html>
