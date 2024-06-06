@@ -2,6 +2,9 @@
 @using System.Data
 @using MVCSmallFarm.ViewModels
 @using MVCSmallFarm.Models.dbs
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Mvc.Core.Fluent 
 
 
 
@@ -60,42 +63,45 @@
         </thead>
         <tbody>
 
-            @if (items.Count() > 1)
+            @if (items.Count() >= 1)
             {
                 @for (var i = 0; i < items.Count(); i += colCount)
                 {
 
                     <tr>
-                        @for (var c = 0; c < colCount && i + c < items.Count(); c++)
+                        @for (var c = 0; c < colCount && i + c < items.Count()+1; c++)
                         {
-                            <td class="noBorder">
-                                <div class="container-bg">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-md-12 gy-3">
-                                                <div class="h-100 w-100">
-                                                    <div class="card-header align-items-center"><img src="@items[i + c].ImageUrl" class="card-img-top" alt="..."></div>
-                                                    <div class="card-body">
-                                                        <div class="row align-items-center text-center g-0">
-                                                            <div class="col-12">
 
-                                                                @if (@items[i + c].IsPromotion == true)
-                                                                {
-                                                                    <span>@items[i + c].ProductName</span>
-                                                                    <span class="badge rounded-pill bg-danger"> Promotion</span>
-                                                                }
+                            @if (i + c  < items.Count()) {
+                                <td class="noBorder">
+                                    <div class="container-bg">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-12 gy-3">
+                                                    <div class="h-100 w-100">
+                                                        <div class="card-header align-items-center"><img src="@items[i + c].ImageUrl" class="card-img-top" alt="..."></div>
+                                                        <div class="card-body">
+                                                            <div class="row align-items-center text-center g-0">
+                                                                <div class="col-12">
+
+                                                                    @if (@items[i + c].IsPromotion == true)
+                                                                    {
+                                                                        <span>@items[i + c].ProductName</span>
+                                                                        <span class="badge rounded-pill bg-danger"> Promotion</span>
+                                                                    }
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row align-items-center text-center g-0">
-                                                            <div class="col-12">
-                                                                <h6>£ @items[i + c].Price</h6>
+                                                            <div class="row align-items-center text-center g-0">
+                                                                <div class="col-12">
+                                                                    <h6>£ @items[i + c].Price</h6>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-12 text-lg-center">
-                                                                <div class="button-container">
-                                                                    <a class="btn btn-outline-info btn-sm" onclick='showdetail("@items[i + c].ProductId","showcomment")'>View Detail</a>
-                                                                    <a href="#" class="btn btn-primary btn-sm">ADD TO CART</a>
+                                                            <div class="row">
+                                                                <div class="col-12 text-lg-center">
+                                                                    <div class="button-container">
+                                                                        <a class="btn btn-outline-info btn-sm" onclick='showdetail("@items[i + c].ProductId","showcomment","<h4>Product Detail</h4>")'>View Detail</a>
+                                                                        <a href="#" class="btn btn-primary btn-sm">ADD TO CART</a>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -104,79 +110,20 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
+                            }else
+                            {
+                                for(int j=c;j< colCount;j++)
+                                { 
+                                    <td>@j</td>
+                                }
+
+                            }
                         }
                     </tr>
                 }
             }
-            else if (items.Count() == 1)
-            {
-                <tr>
-                    @for (var c = 0; c < colCount && c < items.Count()+ colCount-1; c++)
-                    {
-                        <td class="noBorder">
-                            <div class="container-bg">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12 gy-3">
-                                            <div class="h-100 w-100">
-                                                <div class="card-header align-items-center w-50">
-                                                  
-                                                    @if (c == 0)
-                                                    {
-                                                        <img src="@items[c].ImageUrl" class="card-img-top" alt="...">
-                                                    }
-                                                </div>
-                                                <div class="card-body w-50">
-                                                    <i class="bi bi-star-fill text-warning"></i>
-                                                    <i class="bi bi-star-fill text-warning"></i>
-                                                    <i class="bi bi-star-fill text-warning"></i>
-                                                    @if (c == 0)
-                                                    {
-                                                        <div class="row align-items-center text-center g-0">
-                                                            <div class="col-12">
-                                                                @if (@items[c].IsPromotion == true)
-                                                                {
-                                                                    <span>@items[c].ProductName</span>
-                                                                    <span class="badge rounded-pill bg-danger"> Promotion</span>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-items-center text-center g-0">
-                                                            <div class="col-12">
-                                                                <h6>£ @items[c].Price</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-12 text-lg-center">
-                                                                <div class="button-container">
-                                                                    <a class="btn btn-outline-info btn-sm" onclick='showdetail("@items[c].ProductId","showcomment")'>View Detail</a>
-                                                                    <a href="#" class="btn btn-primary btn-sm">ADD TO CART</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <h5 class="card-title align-content-lg-start"></h5>
-                                                        <p class="card-text"></p>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    }
-                </tr>
-               
-            }
-            else
-            {
-                <tr><td style="width:100%">Data not found</td></tr>
-            }
+       
         </tbody>
     </table>
 
@@ -197,22 +144,25 @@
         private readonly IProductRepository _prdrepo;
         List<Category> CategoryLst = new List<Category>();
         List<ProductCatViewModel> Product = new List<ProductCatViewModel>();
-
+        IPagedList<ProductCatViewModel> ProductPL;
 
         protected override async Task OnParametersSetAsync()
         {
-            CategoryLst = await _catrepo.GetAllCategory();  //Intitial DropdownList in Product/PartialAddOrEdit.cshtml
-            Product = ProductList(SelectedCategoryID);
+
         }
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    loaded = true;
+        protected override async Task OnInitializedAsync()
+        {
 
-        //    // await base.OnInitializedAsync();
+            if(CategoryLst.Count() == 0 && Product.Count() ==0)
+            {
+                CategoryLst =await _catrepo.GetAllCategory();  //Intitial DropdownList in Product/PartialAddOrEdit.cshtml
+                Product = ProductList(SelectedCategoryID);
+            }
+            await base.OnInitializedAsync();
 
 
 
-        //}
+        }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -221,7 +171,7 @@
             {
                 await JS.InvokeVoidAsync("onBlazorReady");
             }
-            //base.OnAfterRender(firstRender);
+            base.OnAfterRender(firstRender);
         }
 
 

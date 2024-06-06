@@ -66,6 +66,16 @@ namespace MVCSmallFarm.ViewModels
 
         public string? CategoryName { get; set; }
 
+        public float? PercentOnePoint { get; set; }
+
+        public float? PercentTwoPoint { get; set; }
+
+        public float? PercentThreePoint { get; set; }
+
+        public float? PercentFourPoint { get; set; }
+
+        public float? PercentFivePoint { get; set; }
+
         public IFormFile? fileUpload { get; set; }
     }
 }
