@@ -75,7 +75,7 @@ namespace MVCSmallFarm.Controllers
 
             if (pd != null)
             {
-                pd.ImageUrl = Url.Content("~/img/" + pd.ImageUrl);
+                 pd.ImageUrl = Url.Content("/wwwroot/img/" + pd.ImageUrl);
 
                 if (pd.ImageUrl == null || pd.ImageUrl.Trim() == "")
                 {
@@ -89,6 +89,13 @@ namespace MVCSmallFarm.Controllers
                 }
                 else
                 {
+
+                    pd.PercentOnePoint = (pd.OnePoint / (float)pd.PointTotals) * 100;
+                    pd.PercentTwoPoint = (pd.TwoPoint / (float)pd.PointTotals) * 100;
+                    pd.PercentThreePoint = (pd.ThreePoint / (float)pd.PointTotals) * 100;
+                    pd.PercentFourPoint = (pd.FourPoint / (float)pd.PointTotals) * 100;
+                    pd.PercentFivePoint = (pd.FivePoint / (float)pd.PointTotals) * 100;
+
                     ViewData["ProductDetail"] = pd;
                     return PartialView("_DetailWithComment", pd);
                 }

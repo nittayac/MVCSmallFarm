@@ -1,0 +1,194 @@
+﻿@typeparam TItem
+
+@if (!ListQuery.Any())
+{
+    <div class="none-indicator">(none)</div>
+}
+else
+{
+
+
+    <table class="@tablecss">
+        <thead>
+            @HeaderDisplay
+        </thead>
+        <tbody>
+            @for (var i = 0; i < CurrentDisplay.Count(); i += ItemsPerRow)
+            {
+                <tr>
+                    @for (var c = 0; c < ItemsPerRow && i + c < CurrentDisplay.Count(); c++)
+                    {
+                        <td>
+                            @ItemDisplay(CurrentDisplay[i + c])
+                        </td>
+
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (TotalPages() > 1)
+    {
+        <div class="pager-display">
+            @{
+                int NextPage = 0;
+                int PreviousPage = 0;
+                NextPage = CurrentPage + 1;
+                PreviousPage = CurrentPage - 1;
+
+            }
+
+            @if (CurrentPage == 1)
+            {
+                <button disabled>&laquo;</button>
+                <button disabled>&lsaquo;</button>
+
+                <span>@CurrentPage</span>
+
+                if (NextPage < TotalPages() && NextPage > 1)
+                {
+
+                    <button @onclick="@(() => MovePage(NextPage))">@NextPage</button>
+                }
+
+
+            }
+            else
+            {
+                <button @onclick="@(() => MovePage(1))" title="Move First">&laquo;</button>
+                <button @onclick="@(() => MovePage(PreviousPage))" title="Move Back">&lsaquo;</button>
+            }
+
+
+            @if (CurrentPage > 1)
+            {
+                if (!AtLastPage())
+                {
+
+                    <button @onclick="@(() => MovePage(PreviousPage))">@PreviousPage</button>
+                    <span>@CurrentPage</span>
+                    <button @onclick="@(() => MovePage(NextPage))">@NextPage</button>
+                }
+
+                else
+                {
+                    <span>@CurrentPage</span>
+                }
+            }
+
+
+            @if (!AtLastPage())
+            {
+                <button @onclick="@MoveNext" title="Move Next">&rsaquo;</button>
+                <button @onclick="@MoveLast" title="Move Last">&raquo;</button>
+            }
+            else
+            {
+                <button disabled>&rsaquo;</button>
+                <button disabled>&raquo;</button>
+            }
+            <span>@CurrentPage of @TotalPages() </span>
+        </div>
+    }
+    else
+    {
+
+        <div class="pager-display">
+            @if (CurrentPage == 1)
+            {
+                <button disabled title="Move First">&lsaquo;</button>
+                <button disabled title="Move Back">&lsaquo;</button>
+
+            }
+
+            @if (CurrentPage == 1)
+            {
+                <span>@CurrentPage of @TotalPages() </span>
+                <button disabled title="Move Next">&raquo;</button>
+                <button disabled title="Move Last">&raquo;</button>
+
+            }
+
+        </div>
+
+    }
+
+
+}
+
+@code {
+    [Parameter]
+    public IQueryable<TItem> ListQuery { get; set; }
+    [Parameter]
+    public RenderFragment HeaderDisplay { get; set; }
+    [Parameter]
+    public RenderFragment<TItem> ItemDisplay { get; set; }
+    [Parameter]
+    public int ItemsPerPage { get; set; } = 5;  //How many row a page
+
+    [Parameter]
+    public int ItemsPerRow { get; set; } = 1;  //How many column a row
+
+
+    [Parameter]
+    public string tablecss { get; set; } = "table table-borderless";  //How many row a page
+
+
+    private int CurrentPage = 1;
+    private List<TItem> CurrentDisplay;
+    private int TotalCount;
+
+    protected override void OnParametersSet()
+    {
+        CurrentPage = 1;
+        UpdateDisplay();
+        TotalCount = ListQuery.Count();
+    }
+
+    private void UpdateDisplay()
+    {
+        CurrentDisplay = ListQuery.Skip((CurrentPage - 1) * (ItemsPerPage * ItemsPerRow)).Take((ItemsPerPage * ItemsPerRow)).ToList();
+    }
+
+    private bool AtLastPage()
+    {
+        return CurrentPage >= TotalPages();
+    }
+
+    private int TotalPages()
+    {
+        return Convert.ToInt32(Math.Ceiling(TotalCount / Convert.ToDecimal(ItemsPerPage * ItemsPerRow)));
+    }
+
+    private void MoveFirst()
+    {
+        CurrentPage = 1;
+        UpdateDisplay();
+    }
+
+    private void MoveBack()
+    {
+        CurrentPage--;
+        UpdateDisplay();
+    }
+
+    private void MoveNext()
+    {
+        CurrentPage++;
+        UpdateDisplay();
+    }
+
+    private void MoveLast()
+    {
+        CurrentPage = TotalPages();
+        UpdateDisplay();
+    }
+
+    private void MovePage(int Page)
+    {
+        CurrentPage = Page;
+        UpdateDisplay();
+    }
+
+}

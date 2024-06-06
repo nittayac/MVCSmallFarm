@@ -1,0 +1,148 @@
+﻿@using MVCSmallFarm.Repositories
+@using System.Data
+@using MVCSmallFarm.ViewModels
+@using MVCSmallFarm.Models.dbs
+
+
+
+@page "/"
+@*@implements IAsyncDisposable*@
+@inject IJSRuntime JS
+@inject ICategoriesRepository _catrepo;
+@inject DBConnector cn;
+
+@{
+    const int colCount = 2;
+    const int rowCount = 2;
+}
+
+
+
+@if (CategoryLst != null)
+{
+    @*<select class="form-control" @bind="@SelectedCategoryID">*@
+
+    <select class="form-control" @onchange="@OnSelect">
+
+
+        @foreach (var cat in CategoryLst)
+        {
+            <option value="@cat.CategoryId"> @cat.CategoryId- @cat.CategoryName </option>
+        }
+
+    </select>
+    <br />
+    <p>@SelectedCategoryID</p>
+}
+
+@if (ProductCatalog != null)
+{
+    <PagedList ListQuery="ProductCatalog" ItemsPerPage="@rowCount" ItemsPerRow="@colCount">
+        <HeaderDisplay>
+            @for (int i = 0; i < rowCount; i++)
+            {
+                <tr style="display:none;">
+                    @for (int j = 0; j < colCount; j++)
+                    {
+                        <th></th>
+                    }
+                </tr>
+            }
+        </HeaderDisplay>
+        <ItemDisplay>
+            <div class="container-bg">
+                <div class="container">
+                    <div class="h-100 w-100">
+                        <div class="card-header align-items-center"><img src="@context.ImageUrl" class="card-img-top" alt="..."></div>
+                        <div class="card-body">
+                            <div class="row align-items-center text-center g-0">
+                                <div class="col-12">
+                                    @if (@context.IsPromotion == true)
+                                    {
+                                        <span>@context.ProductName</span>
+                                        <span class="badge rounded-pill bg-danger"> Promotion</span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center text-center g-0">
+                                <div class="col-12">
+                                    <h6>£ @context.Price</h6>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="button-container">
+                                    <a class="btn btn-outline-info btn-sm" onclick='showdetail("@context.ProductId","showcomment","<h4>Product Detail</h4>")'>View Detail</a>
+                                    <a href="#" class="btn btn-primary btn-sm">ADD TO CART</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ItemDisplay>
+    </PagedList>
+
+}
+
+@code {
+
+    int selectedCategoryID;
+    int SelectedCategoryID
+    {
+        get => selectedCategoryID;
+        set { selectedCategoryID = value; }
+    }
+    public int LuckyNumber { get; set; } = 0;
+    //private string selectedString { get; set; }
+
+
+    private readonly IProductRepository _prdrepo;
+    private IQueryable<ProductCatViewModel> ProductCatalog;
+    List<Category> CategoryLst = new List<Category>();
+    List<ProductCatViewModel> Product = new List<ProductCatViewModel>();
+
+
+    protected override void OnInitialized()
+    {
+
+        ProductCatalog = ProductList(SelectedCategoryID).AsQueryable();
+    }
+
+
+    //OnInitializedAsync will make the page refreshes 2 times when page load at the first time.
+    protected override async Task OnInitializedAsync()
+    {
+
+        CategoryLst = await _catrepo.GetAllCategory();  //Intitial DropdownList in Product/PartialAddOrEdit.cshtml
+        //ProductCatalog = ProductList(SelectedCategoryID).AsQueryable();
+    }
+    private List<ProductCatViewModel> ProductList(int id)
+    {
+        DataTable dt = new DataTable();
+        dt = cn.ProductList(id);
+
+        List<ProductCatViewModel> pd = new List<ProductCatViewModel>();
+        pd = (from DataRow dr in dt.Rows
+              select new ProductCatViewModel()
+              {
+                  ProductName = dr["ProductName"].ToString(),
+                  ProductId = Convert.ToInt32(dr["ProductId"]),
+                  IsPromotion = Convert.ToBoolean(dr["ProductId"]),
+                  ImageUrl = $"/img/" + dr["ImageUrl"].ToString(),
+                  Price = Convert.ToDecimal(dr["Price"]),
+                  CategoryId = Convert.ToInt32(dr["CategoryId"]),
+                  CategoryName = dr["CategoryName"].ToString()
+              }).ToList();
+
+        return pd;
+    }
+
+    private void OnSelect(ChangeEventArgs e)
+    {
+        SelectedCategoryID = Convert.ToInt32(e.Value);
+        //selectedString = e.Value.ToString();
+        ProductCatalog = ProductList(SelectedCategoryID).AsQueryable();
+    }
+}

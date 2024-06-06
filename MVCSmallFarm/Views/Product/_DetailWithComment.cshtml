@@ -5,64 +5,82 @@
 
 }
 
-<div class="card mb-3">
-    <h3 class="card-header">@ViewBag.ProductDetail.ProductName</h3>
-    <div class="card-body">
-        <h5 class="card-title">@ViewBag.ProductDetail.CategoryName</h5>
-        @if (ViewBag.ProductDetail.IsPromotion == true)
-        {
-            <div class="card-subtitle text-muted">Promotion</div>
-        }
-    </div>
 
-          @*<img src="@ViewBag.ProductDetail.ImgUrl" style="margin:10px" height="200" width="200" id="imgpreviewdetailblazor" />*@
 
-    <div class="card-body">
-        @*<b>Price:</b><p class="card-text">@ViewBag.ProductDetail.Price.Tostring("c", CultureInfo.GetcultureInfo("th-TH"))</p>*@
-        <b>Price:</b><p class="card-text">@ViewBag.ProductDetail.Price</p>
-        <b>Description:</b><p class="card-text">@ViewBag.ProductDetail.Description</p>
+    <div class="card mb-3">
+        <h3 class="card-header">@ViewBag.ProductDetail.ProductName</h3>
+        <div class="card-body">
+            <h5 class="card-title">@ViewBag.ProductDetail.CategoryName</h5>
+            @if (ViewBag.ProductDetail.IsPromotion == true)
+            {
+                <div class="card-subtitle text-muted">Promotion</div>
+            }
+        </div>
+
+        <div><img src="@ViewBag.ProductDetail.ImageUrl" style="margin:10px" height="200" width="200" id="imgpreviewdetailblazor" /></div>
+
+        <div class="card-body">
+            @*<b>Price:</b><p class="card-text">@ViewBag.ProductDetail.Price.Tostring("c", CultureInfo.GetcultureInfo("th-TH"))</p>*@
+            <b>Price:</b><p class="card-text">@ViewBag.ProductDetail.Price</p>
+            <b>Description:</b><p class="card-text">@ViewBag.ProductDetail.Description</p>
+        </div>
+        <div class="card-body">
+            <b>Shipping:</b>@if (ViewBag.ProductDetail.ShipDateDuration <= 1)
+            {
+                <div class="badge bg-success text-light">Next day</div>
+            }
+            else
+            {
+                <p class="card-text">@ViewBag.ProductDetail.ShipDateDuration days</p>
+            }
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="badge bg-info">Sold :@ViewBag.ProductDetail.SoldTotals</div>
+            </li>
+            <li class="list-group-item">
+                <div class="badge bg-info">Views :@ViewBag.ProductDetail.ViewTotals</div>
+            </li>
+            <li class="list-group-item">
+                <div class="badge bg-info">Comments :@ViewBag.ProductDetail.CommentTotals</div>
+            </li>
+        </ul>
+        <div class="card-body">
+            <div>
+                <b>5 scores:(@ViewBag.ProductDetail.FivePoint)</b>
+
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: @(ViewBag.ProductDetail.PercentFivePoint+"%")" aria-valuenow="@ViewBag.ProductDetail.PercentFivePoint" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <br />
+            <div>
+                <b>4 scores:(@ViewBag.ProductDetail.FourPoint)</b>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: @(ViewBag.ProductDetail.PercentFourPoint+"%")" aria-valuenow="@ViewBag.ProductDetail.PercentFourPoint" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <br />
+            <div>
+                <b>3 scores:(@ViewBag.ProductDetail.ThreePoint)</b>
+                <div class="progress">
+
+                    <div class="progress-bar" role="progressbar" style="width: @(ViewBag.ProductDetail.PercentThreePoint+"%")" aria-valuenow="@ViewBag.ProductDetail.PercentThreePoint" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <br />
+            <div>
+                <b>2 scores:(@ViewBag.ProductDetail.TwoPoint)</b>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: @(ViewBag.ProductDetail.PercentTwoPoint+"%")" aria-valuenow="@ViewBag.ProductDetail.PercentTwoPoint" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <br />
+            <div>
+                <b>1 score:(@ViewBag.ProductDetail.OnePoint)</b>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: @(ViewBag.ProductDetail.PercentOnePoint+"%")" aria-valuenow="@ViewBag.ProductDetail.PercentOnePoint" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <b>Shipping:</b>@if (ViewBag.ProductDetail.ShipDateDuration <= 1)
-        {
-            <div class="badge bg-success text-light">Next day</div>
-        }
-        else
-        {
-            <p class="card-text">@ViewBag.ProductDetail.ShipDateDuration days</p>
-        }
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            <div class="badge bg-info">Sold :@ViewBag.ProductDetail.SoldTotals</div>
-        </li>
-        <li class="list-group-item">
-            <div class="badge bg-info">Views :@ViewBag.ProductDetail.ViewTotals</div>
-        </li>
-        <li class="list-group-item">
-            <div class="badge bg-info">Comments :@ViewBag.ProductDetail.CommentTotals</div>
-        </li>
-    </ul>
-    <div class="card-body">
-        <div>
-            <b>5 scores:(@ViewBag.ProductDetail.FivePoint)</b>
-            <div class="progress-bar" role="progressbar" aria-valuenow="@ViewBag.ProductDetail.FivePoint" aria-valuemin="0" aria-valuemax="@ViewBag.ProductDetail.CommentTotals"></div>
-        </div>
-        <div>
-            <b>4 scores:(@ViewBag.ProductDetail.FourPoint)</b>
-            <div class="progress-bar" role="progressbar" aria-valuenow="@ViewBag.ProductDetail.FourPoint" aria-valuemin="0" aria-valuemax="@ViewBag.ProductDetail.CommentTotals"></div>
-        </div>
-        <div>
-            <b>3 scores:(@ViewBag.ProductDetail.ThreePoint)</b>
-            <div class="progress-bar" role="progressbar" aria-valuenow="@ViewBag.ProductDetail.ThreePoint" aria-valuemin="0" aria-valuemax="@ViewBag.ProductDetail.CommentTotals"></div>
-        </div>
-        <div>
-            <b>2 scores:(@ViewBag.ProductDetail.TwoPoint)</b>
-            <div class="progress-bar" role="progressbar" aria-valuenow="@ViewBag.ProductDetail.TwoPoint" aria-valuemin="0" aria-valuemax="@ViewBag.ProductDetail.CommentTotals"></div>
-        </div>
-        <div>
-            <b>1 score:(@ViewBag.ProductDetail.OnePoint)</b>
-            <div class="progress-bar" role="progressbar" aria-valuenow="@ViewBag.ProductDetail.OnePoint" aria-valuemin="0" aria-valuemax="@ViewBag.ProductDetail.CommentTotals"></div>
-        </div>
-    </div>
-</div>

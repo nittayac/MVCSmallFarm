@@ -4,7 +4,7 @@
 
 function onBlazorReady() {
 
-    $('#example').show();
+   // $('#example').show();
     $('#example').DataTable({
         //"oLanguage": {
         //    "sEmptyTable": "My Custom Message On Empty Table"
@@ -13,7 +13,7 @@ function onBlazorReady() {
         "searching": false,
         "info": false,
         "ordering": false,
-        "stripeClasses": []
+        "pageLength": 4
         
     });
 
