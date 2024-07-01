@@ -1,0 +1,21 @@
+﻿@model int;
+@*@if(Model >0)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-light"
+               asp-controller="ShoppingCart"
+               asp-action="Index">
+                <i class="bi bi-cart-fill"></i>@Model
+            </a>
+         </li>
+
+    }*@
+
+
+<li class="nav-item">
+    <a class="nav-link text-light"
+       asp-controller="ShoppingCart"
+       asp-action="Index">
+        <i class="bi bi-cart-fill"></i>@ViewBag.CountItem
+    </a>
+</li>

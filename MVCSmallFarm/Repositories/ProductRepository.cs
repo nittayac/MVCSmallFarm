@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.Extensions.Internal;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.VisualStudio.TextTemplating;
 
 namespace MVCSmallFarm.Repositories
 {
@@ -302,5 +303,39 @@ namespace MVCSmallFarm.Repositories
             return formFile;
         }
 
+        public async Task CreateComment(ProductWithComment data, string ip)
+        {
+            var cs =await _db.ProductWithComments
+                 .OrderByDescending(i => i.RunningNumber)
+                 .Where(p => p.ProductId == data.ProductId)
+                 .FirstOrDefaultAsync();
+
+            int currentNo;
+            if (cs != null)
+            {
+                currentNo = cs.RunningNumber;
+                currentNo ++;
+            }
+            else {
+                currentNo = 1;
+            }
+
+            data.RunningNumber = currentNo;
+            data.CommentDate = DateTime.Now;
+            data.UserIp = ip;
+            data.IsShow = true;
+            _db.Add(data);
+
+
+
+            var ps = await (from ppd in _db.Products
+                           where (ppd.ProductId == data.ProductId)
+                           select ppd).FirstOrDefaultAsync();
+            var total = ps.CommentTotals;
+            ps.CommentTotals = total++; 
+
+            _db.Update(ps);
+            await _db.SaveChangesAsync();
+        }
     }
 }

@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+    @*@(await Html.RenderComponentAsync<MVCSmallFarm.Components.ProductCatalogPage>(RenderMode.ServerPrerendered))*@
+    @(await Html.RenderComponentAsync<MVCSmallFarm.Components.ProductCatalogWithJQDatatable>(RenderMode.ServerPrerendered))
+
+</div>
+
+
+
+
+@section Scripts
+{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        function TestDataTablesAdd(table) {
+            $(document).ready(function () {
+                //$(table).DataTable();
+                if ($.fn.dataTable.isDataTable(table)) {
+                    table = $(table).DataTable();
+                }
+                else {
+                    table = $(table).DataTable({
+                        ordering: false,
+                        searching: false,
+                        //pageLength: 4,   //make javascript error : null value removechild
+                        lengthChange: false,
+                        language: {
+                            "infoEmpty": "Data not found",
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function TestDataTablesRemove(table) {
+            $(document).ready(function () {
+
+                // 1stclear first
+                if (table != null) {
+                    $(table).DataTable().clear();
+                    $(table).DataTable().destroy();
+                    //tableObj.clear();
+                    //tableObj.destroy();
+                }
+
+                //2nd empty html
+                //$(tableId + " tbody").empty();
+                //$(tableId + " thead").empty();
+
+                //3rd reCreate Datatable object
+                //tableObj = $(tableId).DataTable();
+
+            });
+        }
+    </script>
+}

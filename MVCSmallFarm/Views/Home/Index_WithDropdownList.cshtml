@@ -8,8 +8,6 @@
     const int colCount = 3;
     //List<MVCSmallFarm.ViewModels.ProductCatViewModel> events = Model;
     var items = Model;
-
-    var commentLists = ViewBag.CategoryHome as List<MVCSmallFarm.Models.dbs.Category>;
 }
 
 @*<div class="text-center">
@@ -18,12 +16,17 @@
            <select id="classSelect" asp-items="ViewBag.CategoryHome">
            </select>
        </div>
-</div>*@
+    </div>*@
 
 
-
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.DropDownList("CategoryId", ViewBag.CategoryHome as SelectList, "Select a person", new { @class = "form-control", onchange = "this.form.submit();" })
+    </div>
+}
 <div id="showdata">
-    @Html.Partial("_LeftCategoryProductMenu.cshtml", commentLists)
+    @*@Html.Partial("_ProductCataLogView.cshtml", Model)*@
 
     <table id="data" data-stripe-classes="[]" class="table">
         <thead style="display:none;">
@@ -124,6 +127,14 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
+            var flag = "";
+            if ($("#classSelect option:first").val() != 0) {
+                flag = $("#classSelect").val();
+            }
+
+
+            alert($("#classSelect option:first").val());
+
             var tablebody = $('#data');
             if ($.fn.dataTable.isDataTable(tablebody)) {
                 table = $(tablebody).DataTable();
@@ -140,18 +151,40 @@
                     }
                 });
             }
+
+
+            //if ($("#classSelect option:first").val() == 0) {
+            //    table = $('#data').DataTable({
+            //        ordering: false,
+            //        searching: false,
+            //        stateSave: true,
+            //        pageLength: 3,   //make javascript error : null value removechild  in Blazor component
+            //        lengthChange: false,
+            //        language: {
+            //            "infoEmpty": "Data not found",
+            //        }
+            //    });
+            //} else {
+            //    TestDataTablesAdd();
+            //}
+
+
+            //$('#classSelect').on('change', function () {
+            //    var selectedclass = $('#classSelect').val();
+            //    $.get(`/api/GetProduct?classId=${selectedclass}`, function (data) {
+            //        //alert(data);
+            //        //TestDataTablesRemove(tablebody);
+            //        $('#showdata').html('');
+            //        $('#showdata').html(data);
+            //        var tablebody = $('#data');
+            //        TestDataTablesAdd();
+            //    });
+            //});
         });
 
         function AddToCart(id) {
             $.get(`/api/AddShoppingCart?id=${id}`, function (data) {
                 $("#cartitems").html(data);  // <span id="cartitems"></span>  in _Layout.cshtml
-            });
-        }
-
-
-        function ClickCategory(id) {
-            $.post("/Home/Index", { CategoryId: id }, function (data) {
-               // $("span").html(result);
             });
         }
     </script>

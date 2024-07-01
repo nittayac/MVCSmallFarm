@@ -1,0 +1,24 @@
+﻿@model List<MVCSmallFarm.Models.dbs.Category>
+
+@{
+    var items = Model;
+}
+
+@if (items != null)
+{
+    <ul class="list-group">
+        @for (int i = 0; i < items.Count; i++)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+       
+                <a class="text-success"
+                   asp-controller="Home"
+                   asp-action="ClickCategory"
+                   asp-route-id="@items[i].CategoryId">
+                    @items[i].CategoryId @items[i].CategoryName
+                </a>
+                    @*<a href="#" onclick='ClickCategory("@items[i].CategoryId")'>@items[i].CategoryName</a>*@
+                </li>
+        }
+    </ul>
+}

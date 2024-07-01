@@ -103,3 +103,19 @@ div.image:before {
 table.dataTable tr.even {
     background-color: white;
 }*/
+
+
+td:empty {
+    display: none;
+}
+
+#nav a {
+    color: #03aa96;
+    font-size: 20px;
+    margin-top: 22px;
+    font-weight: 600;
+}
+
+#nav {
+    margin-top: 20px;
+}

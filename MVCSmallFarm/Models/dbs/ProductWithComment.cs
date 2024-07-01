@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVCSmallFarm.Models.dbs;
 
@@ -7,6 +8,7 @@ public partial class ProductWithComment
 {
     public int ProductId { get; set; }
 
+    [Key]
     public int RunningNumber { get; set; }
 
     public string UserId { get; set; }

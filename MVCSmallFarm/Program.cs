@@ -5,6 +5,8 @@ using MVCSmallFarm.Models.dbs;
 using MVCSmallFarm.Repositories;
 using Newtonsoft.Json.Serialization;
 using MVCSmallFarm.ViewModels;
+using MVCSmallFarm.Services;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +36,14 @@ builder.Services.AddSingleton<DBConnector>();   //Using DBConnector (class) in B
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
-//builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddScoped<CommentsService>();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+
+//builder.Services.AddSingleton<IHttpContextAccessor, IHttpContextAccessor>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped(sc => ShppingCartService.CreateShoppingCart(sc));
 
 builder.Services.AddServerSideBlazor();  //Using Blazor component
 
