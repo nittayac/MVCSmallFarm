@@ -36,6 +36,7 @@ builder.Services.AddSingleton<DBConnector>();   //Using DBConnector (class) in B
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 builder.Services.AddScoped<CommentsService>();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 

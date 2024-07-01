@@ -3,72 +3,75 @@
 @model ShoppingCartViewModel
 
 <div class="container">
-    <div class="row">
-        <div class="card bg-dark text-light border-light">
-            <div class="card-header">
-                <h2>Order Detail</h2>
+    <form asp-controller="ShoppingCart" asp-action="OrderResult">
+        <div class="row">
+            <div class="card bg-dark text-light border-light">
+                <div class="card-header">
+                    <h2>Order Detail</h2>
+                </div>
             </div>
-        </div>
-        <div class="card-body">
-            <table class="table text-light">
-                <thead class="bg-secondary">
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Product Price</th>
-                        <th>Product Amount</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach(var item in Model.ShoppingCartSV.SCItem)
-                    { 
+            <div class="card-body">
+                <table class="table text-light">
+                    <thead class="bg-secondary">
                         <tr>
-                            <td>@item.Product.ProductName</td>
-                            <td>@item.Product.Price.ToString()</td>
-                            <td>
-                                @item.Amount
-                                <a class="text-danger ml-3"
-                                   asp-controller="ShoppingCart"
-                                   asp-action="RemoveItemFromShoppingCart"
-                                   asp-route-id="@item.Product.ProductId">
-                                    <i class="bi bi-arrow-down-circle-fill"></i>
-                                </a>
-                                <a class="text-success"
-                                   asp-controller="ShoppingCart"
-                                   asp-action="AddItemToShoppingCartItem"
-                                   asp-route-id="@item.Product.ProductId">
-                                    <i class="bi bi-arrow-up-circle-fill"></i>
-                                </a>
-                            </td>
+                            <th>Product Name</th>
+                            <th>Product Price</th>
+                            <th>Product Amount</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ShoppingCartSV.SCItem)
+                        {
+                            <tr>
+                                <td>@item.Product.ProductName</td>
+                                <td>@item.Product.Price.ToString()</td>
+                                <td>
+                                    @item.Amount
+                                    <a class="text-danger ml-3"
+                                        asp-controller="ShoppingCart"
+                                        asp-action="RemoveItemFromShoppingCart"
+                                        asp-route-id="@item.Product.ProductId">
+                                        <i class="bi bi-arrow-down-circle-fill"></i>
+                                    </a>
+                                    <a class="text-success"
+                                        asp-controller="ShoppingCart"
+                                        asp-action="AddItemToShoppingCartItem"
+                                        asp-route-id="@item.Product.ProductId">
+                                        <i class="bi bi-arrow-up-circle-fill"></i>
+                                    </a>
+                                </td>
+                                <td class="text-end">
+                                    @(
+                                (item.Amount * item.Product.Price).ToString()
+                            )
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><b>Total :</b></td>
+                            <td><span class="cell black"></span></td>
+                            <td><span class="cell black"></span></td>
                             <td class="text-end">
-                                @(
-                                    (item.Amount * item.Product.Price).ToString()
-                                )
+                                @Model.SCTotal.ToString()
                             </td>
                         </tr>
-                    }
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td><b>Total :</b></td>
-                        <td></td>
-                        <td class="text-end">
-                            @Model.SCTotal.ToString()
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-        <div class="card-footer">
-            <div class="bg-dark float-end">
-                <a class="btn btn-outline-warning"
-                   asp-controller="Catalog"
-                   asp-action="Index">Continue shopping</a>
-                <a class="btn btn-outline-light"
-                   asp-controller="ShoppingCart"
-                   asp-action="OrderResult">Payment</a>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="card-footer">
+                <div class="bg-dark float-end">
+                    <a class="btn btn-outline-warning"
+                        asp-controller="Home"
+                        asp-action="Index">Continue shopping</a>
+                    @*<a class="btn btn-outline-light"
+                        asp-controller="ShoppingCart"
+                        asp-action="OrderResult">Payment</a>*@
+                    <input  class="btn btn-outline-light" type="submit" value="Payment" />
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>  

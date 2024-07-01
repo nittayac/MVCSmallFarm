@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MVCSmallFarm.Models.dbs;
 using MVCSmallFarm.Repositories;
 using MVCSmallFarm.Services;
 using MVCSmallFarm.ViewModels;
 using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 
 namespace MVCSmallFarm.Controllers
 {
@@ -11,10 +13,13 @@ namespace MVCSmallFarm.Controllers
     {
         private IProductRepository _productRepo;
         private ShppingCartService _shoppingCart;
-        public ShoppingCart(IProductRepository productRepo, ShppingCartService shoppingCart)
+        private IShoppingCartRepository _shoppingCartRepo;
+
+        public ShoppingCart(IProductRepository productRepo, ShppingCartService shoppingCart,IShoppingCartRepository shoppingCartRepo)
         {
             _productRepo = productRepo;
             _shoppingCart = shoppingCart;
+            _shoppingCartRepo = shoppingCartRepo;
         }
 
         public IActionResult Index()
@@ -67,6 +72,28 @@ namespace MVCSmallFarm.Controllers
             }
             HttpContext.Session.SetString("cart", CountItems().ToString());  // using this session in _Layout.cshtml  --> Making the amount of items in cart is still showing when clicks the arrow up
             return RedirectToAction("Index", "ShoppingCart");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OrderResult() 
+        {
+            string userid = "555";
+            string userip = HttpContext.Connection.RemoteIpAddress.ToString();
+
+            List<ShoppingCartItem> item = _shoppingCart.MyShoppingCart();
+            if (item.Count != 0)
+            {
+                await _shoppingCartRepo.SaveOrder(item, userid, userip);
+                await _shoppingCart.Clear();
+                HttpContext.Session.Remove("cart");
+
+                return View();
+            }
+            else {
+                return View("NotBuy");
+            
+            }
+        
         }
 
         private int CountItems()

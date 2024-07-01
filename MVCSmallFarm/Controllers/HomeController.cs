@@ -62,27 +62,27 @@ namespace MVCSmallFarm.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Index(int CategoryId)
-        {
-           // ViewData["CategoryHome"] = new SelectList(await _catrepo.GetAllCategory(), "CategoryId", "CategoryName", CategoryId);
-            List<ProductCatViewModel> pd;
-            if (CategoryId == 0)
-            {
-                pd =  await _product.GetAllProduct();
-                for (int i = 0; i < pd.Count; i++)
-                {
-                    pd[i].ImageUrl = $"/img/" + pd[i].ImageUrl;
-                }
-            }
-            else
-            {
-                pd = ProductList(CategoryId);
-            }
-            //return PartialView("_ProductCataLogView", pd);
-            //return Json(pd);
-            return View(pd);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Index(int CategoryId)
+        //{
+        //   // ViewData["CategoryHome"] = new SelectList(await _catrepo.GetAllCategory(), "CategoryId", "CategoryName", CategoryId);
+        //    List<ProductCatViewModel> pd;
+        //    if (CategoryId == 0)
+        //    {
+        //        pd =  await _product.GetAllProduct();
+        //        for (int i = 0; i < pd.Count; i++)
+        //        {
+        //            pd[i].ImageUrl = $"/img/" + pd[i].ImageUrl;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        pd = ProductList(CategoryId);
+        //    }
+        //    //return PartialView("_ProductCataLogView", pd);
+        //    //return Json(pd);
+        //    return View(pd);
+        //}
 
 
         public IActionResult Privacy()

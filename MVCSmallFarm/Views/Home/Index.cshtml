@@ -22,63 +22,70 @@
 
 
 
-<div id="showdata">
-    @Html.Partial("_LeftCategoryProductMenu.cshtml", commentLists)
+<div id="showdata" class="container">
+    <div class="row">
 
-    <table id="data" data-stripe-classes="[]" class="table">
-        <thead style="display:none;">
-            <tr>
+        <div class="col-3 bg-light p-3">
+            @Html.Partial("_LeftCategoryProductMenu.cshtml", commentLists)
+        </div>
 
-                @for (var c = 0; c < colCount; c++)
-                {
-                    <th> <span aria-hidden="true">&times;</span></th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-
-            @if (items.Count() >= 1)
-            {
-                @for (var i = 0; i < items.Count(); i += colCount)
-                {
-
+        <div class="col-sm-9 bg-light p-3">
+            <table id="data" data-stripe-classes="[]" class="table">
+                <thead style="display:none;">
                     <tr>
-                        @for (var c = 0; c < colCount && i + c < items.Count() + 1; c++)
+
+                        @for (var c = 0; c < colCount; c++)
+                        {
+                            <th> <span aria-hidden="true">&times;</span></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (items.Count() >= 1)
+                    {
+                        @for (var i = 0; i < items.Count(); i += colCount)
                         {
 
-                            @if (i + c < items.Count())
-                            {
-                                var productid = items[i + c].ProductId;
+                            <tr>
+                                @for (var c = 0; c < colCount && i + c < items.Count() + 1; c++)
+                                {
 
-                                <td class="noBorder">
-                                    <div class="container-bg">
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-md-12 gy-3">
-                                                    <div class="h-100 w-100">
-                                                        <div class="card-header align-items-center"><img src="@items[i + c].ImageUrl" class="card-img-top" alt="..."></div>
-                                                        <div class="card-body">
-                                                            <div class="row align-items-center text-center g-0">
-                                                                <div class="col-12">
+                                    @if (i + c < items.Count())
+                                    {
+                                        var productid = items[i + c].ProductId;
 
-                                                                    @if (@items[i + c].IsPromotion == true)
-                                                                    {
-                                                                        <span>@items[i + c].ProductName</span>
-                                                                        <span class="badge rounded-pill bg-danger"> Promotion</span>
-                                                                        <span class="badge rounded-pill bg-danger"> @items[i + c].CategoryName</span>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                            <div class="row align-items-center text-center g-0">
-                                                                <div class="col-12">
-                                                                    <h6>£ @items[i + c].Price</h6>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-12 text-lg-center">
-                                                                    <div class="button-container">
-                                                                        <a class="btn btn-outline-info btn-sm" onclick='showdetail("@items[i + c].ProductId","showcomment","<h4>Product Detail</h4>","nomodal")'>View Detail</a>
-                                                                        <a href="#" class="btn btn-primary btn-sm" onclick='AddToCart("@items[i + c].ProductId")'>ADD TO CART</a>
+                                        <td class="noBorder">
+                                            <div class="container-bg">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-12 gy-3">
+                                                            <div class="h-100 w-100">
+                                                                <div class="card-header align-items-center"><img src="@items[i + c].ImageUrl" class="card-img-top" alt="..."></div>
+                                                                <div class="card-body">
+                                                                    <div class="row align-items-center text-center g-0">
+                                                                        <div class="col-12">
+
+                                                                            @if (@items[i + c].IsPromotion == true)
+                                                                            {
+                                                                                <span>@items[i + c].ProductName</span>
+                                                                                <span class="badge rounded-pill bg-danger"> Promotion</span>
+                                                                                <span class="badge rounded-pill bg-danger"> @items[i + c].CategoryName</span>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row align-items-center text-center g-0">
+                                                                        <div class="col-12">
+                                                                            <h6>£ @items[i + c].Price</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-12 text-lg-center">
+                                                                            <div class="button-container">
+                                                                                <a class="btn btn-outline-info btn-sm" onclick='showdetail("@items[i + c].ProductId","showcomment","<h4>Product Detail</h4>","nomodal")'>View Detail</a>
+                                                                                <a href="#" class="btn btn-primary btn-sm" onclick='AddToCart("@items[i + c].ProductId")'>ADD TO CART</a>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -86,33 +93,37 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            }
-                            else
-                            {
-                                for (int j = c; j < colCount; j++)
-                                {
-                                    <td class="noBorder">
-                                        <div class="container-bg">
-                                            <div class="container">
-                                                <span aria-hidden="true"></span>
-                                            </div>
-                                        </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        for (int j = c; j < colCount; j++)
+                                        {
+                                            <td class="noBorder">
+                                                <div class="container-bg">
+                                                    <div class="container">
+                                                        <span aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
 
-                                    </td>
+                                            </td>
+                                        }
+
+                                    }
                                 }
-
-                            }
+                            </tr>
                         }
-                    </tr>
-                }
-            }
+                    }
 
-        </tbody>
-    </table>
+                </tbody>
+            </table>
 
+        </div>
+
+
+
+
+    </div>
 </div>
 
 
@@ -143,6 +154,7 @@
         });
 
         function AddToCart(id) {
+            //In shopping controller
             $.get(`/api/AddShoppingCart?id=${id}`, function (data) {
                 $("#cartitems").html(data);  // <span id="cartitems"></span>  in _Layout.cshtml
             });
