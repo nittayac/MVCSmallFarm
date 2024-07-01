@@ -1,11 +1,13 @@
-﻿@model MVCSmallFarm.ViewModels.ProductCatViewModel
-
+﻿@using MVCSmallFarm.ViewModels
+@model MVCSmallFarm.Models.dbs.ProductWithComment
+@inject MVCSmallFarm.Services.CommentsService CS
+@*@using System.Globalization*@
 @{
     ViewData["Title"] = "Product Detail";
 
+    var commentLists = await CS.CommentsByProductId(ViewBag.ProductDetail.ProductId);
+
 }
-
-
 
 <div class="card mb-3">
     <h3 class="card-header">@ViewBag.ProductDetail.ProductName</h3>
@@ -27,7 +29,7 @@
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                Description
+                    Description
                 </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
@@ -117,6 +119,50 @@
             </div>
         </div>
     </div>
+    @foreach (var item in commentLists)
+    {
+        <div class="card-body">
+            <p class="card-text">
+                Comment : @item.RunningNumber
+            </p><hr />
+            <p class="card-text">
+                @item.Comment
+            </p>
+        </div>
+
+        <div class="card-footer">
+            <div>
+                Username: @item.UserId
+                IP Address : @item.UserIp
+                Comment Date: @item.CommentDate.ToString("dd/MM/yyy HH:mm")
+            </div>
+        </div>
+    }
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-controller="Product" asp-action="Comment">
+                        <input type="hidden" asp-for="ProductId" value="@ViewBag.ProductDetail.ProductId" />
+                        <div class="form-group">
+                            <label asp-for="Comment" class="control-label"></label>
+                            <textarea asp-for="Comment" rows="5" class="form-control"
+                                      autocomplete="off" maxlength="255" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UserId" class="control-label"></label>
+                            <input asp-for="UserId" class="form-control" autocomplete="off" maxlength="50" required />
+                        </div>
+                        <div class="form-control mt-2">
+                            <input type="submit" value="Comment" class="btn btn-outline-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
 
- </div>
+    </div>
+</div>
+
+

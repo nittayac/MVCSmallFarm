@@ -7,10 +7,8 @@ function onBlazorReady() {
             "ordering": false,
             "lengthChange": true,
             "processing": true,
-            "serverSide": true,
             "lengthMenu": [[3, 6, 9, 12, 15], [3, 6, 9, 12, "Max"]],
             "pageLength": 3,
-            "ajax": "/pastes/" + search,
             "language": {
                 "infoEmpty": "Please add Keyword first!",
             }

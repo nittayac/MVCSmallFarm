@@ -1,4 +1,5 @@
-﻿using MVCSmallFarm.ViewModels;
+﻿using MVCSmallFarm.Models.dbs;
+using MVCSmallFarm.ViewModels;
 
 namespace MVCSmallFarm.Repositories
 {
@@ -9,7 +10,7 @@ namespace MVCSmallFarm.Repositories
         Task<List<ErrorsMsg>> CreateProduct(ProductCatViewModel data, IFormFile files);
         Task<List<ErrorsMsg>> UpdateProduct(ProductCatViewModel pc, IFormFile files);
         Task<List<ErrorsMsg>> DeleteProduct(int id);
-
+        Task CreateComment(ProductWithComment data,string ip);
     }
 }
 

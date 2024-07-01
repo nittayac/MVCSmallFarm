@@ -3,12 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.FileProviders;
 using MVCSmallFarm.Models.dbs;
 using MVCSmallFarm.Repositories;
 using MVCSmallFarm.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Json;
+using static System.Collections.Specialized.BitVector32;
+using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -20,6 +25,7 @@ namespace MVCSmallFarm.Controllers
         private readonly IProductRepository _prdrepo;
         private List<ErrorsMsg> msg = new List<ErrorsMsg>();
         private const string SessionNameImg = "_imgname";
+        private const string SessionNameProductCat = "ModelPd";
         public ProductController(ICategoriesRepository catrepo, IProductRepository prdrepo)
         {
             _catrepo = catrepo;
@@ -66,22 +72,40 @@ namespace MVCSmallFarm.Controllers
                 ViewData["Category"] = new SelectList(await _catrepo.GetAllCategory(), "CategoryId", "CategoryName");  //Intitial DropdownList in Product/PartialAddOrEdit.cshtml
                 return PartialView("ProductAddEditView", pd);
             }
-        
+
         }
 
-        public async Task<ActionResult> Detail(int id,string flg) 
+        [HttpGet]
+        public IActionResult DetailPreview()
+        {
+            //ViewData["ProductDetail"] = pd;
+
+            var value = HttpContext.Session.GetString("ModelPd");
+            ProductCatViewModel bsObj2 = (ProductCatViewModel)JsonConvert.DeserializeObject<ProductCatViewModel>(value);
+
+            ViewData["ProductDetail"] = bsObj2;
+            HttpContext.Session.Remove("ModelPd");
+            return View();
+        }
+
+        public async Task<ActionResult> Detail(int id, string flg, string modal)
         {
             var pd = await _prdrepo.GetAllProductById(id);
 
             if (pd != null)
             {
-                 pd.ImageUrl = Url.Content("/wwwroot/img/" + pd.ImageUrl);
+                pd.ImageUrl = Url.Content("/wwwroot/img/" + pd.ImageUrl);
 
                 if (pd.ImageUrl == null || pd.ImageUrl.Trim() == "")
                 {
                     pd.ImageUrl = DefaultValue.DefaultImg;
                 }
 
+                pd.PercentOnePoint = (pd.OnePoint / (float)pd.PointTotals) * 100;
+                pd.PercentTwoPoint = (pd.TwoPoint / (float)pd.PointTotals) * 100;
+                pd.PercentThreePoint = (pd.ThreePoint / (float)pd.PointTotals) * 100;
+                pd.PercentFourPoint = (pd.FourPoint / (float)pd.PointTotals) * 100;
+                pd.PercentFivePoint = (pd.FivePoint / (float)pd.PointTotals) * 100;
 
                 if (flg == "nocomment")
                 {
@@ -89,15 +113,20 @@ namespace MVCSmallFarm.Controllers
                 }
                 else
                 {
-
-                    pd.PercentOnePoint = (pd.OnePoint / (float)pd.PointTotals) * 100;
-                    pd.PercentTwoPoint = (pd.TwoPoint / (float)pd.PointTotals) * 100;
-                    pd.PercentThreePoint = (pd.ThreePoint / (float)pd.PointTotals) * 100;
-                    pd.PercentFourPoint = (pd.FourPoint / (float)pd.PointTotals) * 100;
-                    pd.PercentFivePoint = (pd.FivePoint / (float)pd.PointTotals) * 100;
-
                     ViewData["ProductDetail"] = pd;
-                    return PartialView("_DetailWithComment", pd);
+                    if (modal == "nomodal")
+                    {
+                        //return PartialView("Detail");
+                        pd.fileUpload = null;
+                        string json = JsonConvert.SerializeObject(pd);
+                        HttpContext.Session.SetString("ModelPd", json);
+                        return Json(new { success = true, message = "/Product/DetailPreview" });
+                        //return RedirectToAction("DetailPreview", pd);
+                    }
+                    else {
+                        return PartialView("_DetailWithComment", pd);
+                    }
+
                 }
             }
             else {
@@ -114,8 +143,6 @@ namespace MVCSmallFarm.Controllers
             {
                 HttpContext.Session.SetString("imgurl", pc.ImageUrl);
             }
-
-
             if (ModelState.IsValid)
             {
 
@@ -129,8 +156,8 @@ namespace MVCSmallFarm.Controllers
                     msg = await _prdrepo.UpdateProduct(pc, files: pc.fileUpload);
                 }
 
-               // ViewBag.ID = 0;
-               // ModelState.Clear();
+                // ViewBag.ID = 0;
+                // ModelState.Clear();
 
 
                 if (msg[0].IsSuccess)
@@ -147,7 +174,7 @@ namespace MVCSmallFarm.Controllers
             {
                 var imgstr = HttpContext.Session.GetString("imgurl");
                 pc.ImageUrl = imgstr;
-                HttpContext.Session.Remove("imgurl"); 
+                HttpContext.Session.Remove("imgurl");
 
                 ViewData["Category"] = new SelectList(await _catrepo.GetAllCategory(), "CategoryId", "CategoryName", pc.CategoryId);
 
@@ -176,6 +203,19 @@ namespace MVCSmallFarm.Controllers
 
             }
 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Comment(ProductWithComment data)
+        {
+            if (ModelState.IsValid)
+            {
+                string userip = HttpContext.Connection.RemoteIpAddress.ToString();
+                await _prdrepo.CreateComment(data,userip);
+                return Redirect("/Home/Index");
+            }
+            return View(data);
         }
     }
 }

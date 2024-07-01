@@ -1,0 +1,95 @@
+﻿@using MVCSmallFarm.ViewModels;
+@model List<ProductCatViewModel>
+
+@{
+    const int colCount = 3;
+    //List<MVCSmallFarm.ViewModels.ProductCatViewModel> events = Model;
+    var items = Model;
+}
+
+<table id="example" data-stripe-classes="[]" class="table">
+    <thead style="display:none;">
+        <tr>
+
+            @for (var c = 0; c < colCount; c++)
+            {
+                <th> <span aria-hidden="true">&times;</span></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (items.Count() >= 1)
+        {
+            @for (var i = 0; i < items.Count(); i += colCount)
+            {
+
+                <tr>
+                    @for (var c = 0; c < colCount && i + c < items.Count() + 1; c++)
+                    {
+
+                        @if (i + c < items.Count())
+                        {
+                            var productid = items[i + c].ProductId;
+
+                            <td class="noBorder">
+                                <div class="container-bg">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12 gy-3">
+                                                <div class="h-100 w-100">
+                                                    <div class="card-header align-items-center"><img src="@items[i + c].ImageUrl" class="card-img-top" alt="..."></div>
+                                                    <div class="card-body">
+                                                        <div class="row align-items-center text-center g-0">
+                                                            <div class="col-12">
+
+                                                                @if (@items[i + c].IsPromotion == true)
+                                                                {
+                                                                    <span>@items[i + c].ProductName</span>
+                                                                    <span class="badge rounded-pill bg-danger"> Promotion</span>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="row align-items-center text-center g-0">
+                                                            <div class="col-12">
+                                                                <h6>£ @items[i + c].Price</h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-12 text-lg-center">
+                                                                <div class="button-container">
+                                                                    <a class="btn btn-outline-info btn-sm" onclick='showdetail("@items[i + c].ProductId","showcomment","<h4>Product Detail</h4>","nomodal")'>View Detail</a>
+                                                                    @*<a href="#" class="btn btn-primary btn-sm" @onclick="(() => AddItemToShoppingCart(productid))">ADD TO CART</a>*@
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            for (int j = c; j < colCount; j++)
+                            {
+                                <td class="noBorder">
+                                    <div class="container-bg">
+                                        <div class="container">
+                                            <span aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            }
+
+                        }
+                    }
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>

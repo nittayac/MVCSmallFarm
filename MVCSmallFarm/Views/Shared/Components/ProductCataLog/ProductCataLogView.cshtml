@@ -1,0 +1,13 @@
+﻿@using MVCSmallFarm.ViewModels;
+@model List<ProductCatViewModel>
+
+@{
+    const int colCount = 3;
+    //List<MVCSmallFarm.ViewModels.ProductCatViewModel> events = Model;
+    var items = Model;
+}
+
+@for (var i = 0; i < items.Count(); i++)
+{
+    <p>@items[i].ProductId</p>
+}
