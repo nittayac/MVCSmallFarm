@@ -1,24 +1,51 @@
-﻿@model List<MVCSmallFarm.Models.dbs.Category>
+﻿
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Http.Extensions;
+@model List<MVCSmallFarm.Models.dbs.Category>
 
 @{
     var items = Model;
+
+    string pageUrl = Context.Request.GetDisplayUrl();
+
+    string actions = ViewContext.RouteData.Values["action"].ToString();
 }
 
 @if (items != null)
 {
+
     <ul class="list-group">
         @for (int i = 0; i < items.Count; i++)
         {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-       
-                <a class="text-success"
-                   asp-controller="Home"
-                   asp-action="ClickCategory"
-                   asp-route-id="@items[i].CategoryId">
-                    @items[i].CategoryId @items[i].CategoryName
-                </a>
+
+            @if (i == 0)
+            {
+                <li class="@(ViewBag.catid == items[i].CategoryId  ? "list-group-item list-group-item-primary d-flex justify-content-between align-items-center nav_selected" :"list-group-item list-group-item-primary d-flex justify-content-between align-items-center") setBtnMargin">
+                    <a class="nav-link text-dark"
+                       asp-controller="Home"
+                       asp-action="ClickCategory">
+                        @items[i].CategoryName
+                    </a>
+                </li>
+
+            }
+            else
+            {
+                <li class="@(ViewBag.catid == items[i].CategoryId  ? "list-group-item list-group-item-primary d-flex justify-content-between align-items-center nav_selected" : "list-group-item list-group-item-white d-flex justify-content-between align-items-center") setBtnMargin">
+                    <a class="nav-link text-dark"
+                       asp-controller="Home"
+                       asp-action="ClickCategory"
+                       asp-route-id="@items[i].CategoryId">
+                        &nbsp;&nbsp;@items[i].CategoryName
+                    </a>
                     @*<a href="#" onclick='ClickCategory("@items[i].CategoryId")'>@items[i].CategoryName</a>*@
                 </li>
-        }
-    </ul>
+                }
+
+                }
+            </ul>
+    @*<div>@pageUrl</div>
+    <br />
+    <div>@actions</div>*@
+
 }

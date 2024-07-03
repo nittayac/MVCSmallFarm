@@ -53,7 +53,7 @@
                         <td>
                             <a class="btn btn-outline-primary" title="Edit" onclick='ReloadProductAddEditViewComponent("@item.ProductId","Edit")'><img class="icon" src="~/css/img/pencil.png" /></a>
                             <a class="btn btn-outline-primary" title="Delete" id="btnDelete" onclick='confirmSubmitJQ("@item.ProductId","Do you want to delete product :@item.ProductName"+"?","/Product/DeleteProduct","       Deleting......\n\nPlease wait")'><img class="icon" src="~/css/img/bin.png" /></a>
-                            <a class="btn btn-outline-primary" title="Product Detail" id="btnDetail" onclick='showdetail("@item.ProductId","nocomment")'><img class="icon" src="~/css/img/detail.png" /></a>
+                            <a class="btn btn-outline-primary" title="Product Detail" id="btnDetail" onclick='showdetail("@item.ProductId","comment","Product Detail","modal")'><img class="icon" src="~/css/img/detail.png" /></a>
                         </td>
                     </tr>
                 }

@@ -10,10 +10,10 @@
 <div class="card mb-3">
     <h3 class="card-header">@ViewBag.ProductDetail.ProductName</h3>
     <div class="card-body">
-        <h5 class="card-title">@ViewBag.ProductDetail.CategoryName</h5>
+        <h5 class="card-title">Category : @ViewBag.ProductDetail.CategoryName</h5>
         @if (ViewBag.ProductDetail.IsPromotion == true)
         {
-            <div class="card-subtitle text-muted">Promotion</div>
+            <div class="badge bg-danger">Promotion</div>
         }
     </div>
 

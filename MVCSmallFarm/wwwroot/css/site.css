@@ -119,3 +119,28 @@ td:empty {
 #nav {
     margin-top: 20px;
 }
+
+
+
+.navbar-nav > li > a.active, .navbar-nav > li > a.active:focus, .navbar-nav > li > a.active:hover {
+    border-bottom: 3px solid #B98D2D;
+}
+
+.navbar-nav > li a:hover {
+    border-bottom: 3px solid red;
+}
+
+.navbar-nav > li.a:focus {
+    border-bottom: 3px solid yellow;
+}
+
+.nav_selected {
+    display :block;
+    background-color: #ebbd25;
+    color: white;
+}
+
+
+.list-group > li > a.active, .list-group > li > a.active:focus, .list-group > li > a.active:hover {
+    border-bottom: 3px solid #B98D2D;
+}

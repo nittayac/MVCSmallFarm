@@ -35,5 +35,9 @@ public partial class Order
 
     public string UserIp { get; set; }
 
+    public DateTime? CreateDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }
