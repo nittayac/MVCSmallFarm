@@ -37,6 +37,7 @@ namespace MVCSmallFarm.Controllers
             if (HttpContext.Session.GetInt32("categoryid") != null)
             {
                 categoryid = (int)HttpContext.Session.GetInt32("categoryid");
+                ViewData["catid"] = categoryid;
                 HttpContext.Session.Remove("categoryid");
             }          
             if (categoryid == 0)

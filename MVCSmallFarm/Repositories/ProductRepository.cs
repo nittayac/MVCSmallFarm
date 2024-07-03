@@ -22,7 +22,7 @@ namespace MVCSmallFarm.Repositories
             var p = await (from pd in _db.Products
                            from c in _db.Categories
                            where pd.CategoryId == c.CategoryId
-                           orderby pd.ProductId descending
+                           orderby pd.CreateDate descending,pd.UpdateDate descending
                            select new ProductCatViewModel
                            {
                                ProductId = pd.ProductId,
@@ -98,8 +98,6 @@ namespace MVCSmallFarm.Repositories
             {
                 ProductCatViewModel p = new ProductCatViewModel();
                 return p;
-
-
             }
             //return p;
         }

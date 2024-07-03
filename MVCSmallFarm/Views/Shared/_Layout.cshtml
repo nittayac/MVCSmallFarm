@@ -1,6 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Http;
-@{ 
+@using Microsoft.AspNetCore.Http.Extensions;
+@{
     var data = Context.Session.GetString("cart");
+    string pageUrl = Context.Request.GetDisplayUrl();
+
+    string actions = ViewContext.RouteData.Values["action"].ToString();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -26,6 +30,8 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            @*<div>@pageUrl</div><br />
+            <div>@actions</div>*@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVCSmallFarm</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -33,7 +39,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    @*<ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -43,6 +49,38 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="index">Product</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="@Url.Action("Index","Product")" @(ViewContext.RouteData.Values["action"].ToString().Equals("Index") ? "class=nav_selected" : "")>Product2</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCart" asp-action="OrderHistorys">Product History</a>
+                        </li>
+
+                        <li class="nav-item"><span class="cell black"></span></li>
+                    </ul>*@
+
+
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="@(pageUrl.ToLower().Contains("/index") ? "nav_selected" : string.Empty) setBtnMargin">
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-outline-primary">Home3 </a>
+                        </li>
+                        <li class="@(pageUrl.ToLower().Contains("/privacy") ? "nav_selected" : string.Empty) setBtnMargin">
+                            <a href="@Url.Action("Privacy", "Home")" class="btn btn-outline-primary">Privacy3 </a>
+                        </li>
+                        <li class="@(pageUrl.ToLower().Contains("/product") ? "nav_selected" : string.Empty) setBtnMargin">
+                            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-primary">Product3 </a>
+                        </li>
+                        <li class="@(pageUrl.ToLower().Contains("/shoppingcart/orderhistorys") ? "nav_selected" : string.Empty) setBtnMargin">
+                            <a href="@Url.Action("OrderHistorys", "ShoppingCart")" class="btn btn-outline-primary">OrderHistorys3 </a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a href="#" class="btn btn-warning">SIGN IN</a>
+                        </li>
                         <li class="nav-item">
                             @*@await Component.InvokeAsync("ShppingCartSummary");*@
                             <a class="nav-link text-bg-primary"
@@ -50,7 +88,6 @@
                                asp-action="Index">
                                 <i class="bi bi-cart"></i><span id="cartitems">@data</span>
                             </a>
-                           
                         </li>
                     </ul>
                 </div>
@@ -99,7 +136,7 @@
 
     <script src="~/lib/Pagination.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/Scripts/Sahred.js"></script>
+    <script src="~/Scripts/Shared.js"></script>
     <script src="_framework/blazor.server.js"></script>
 
 

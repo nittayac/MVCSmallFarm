@@ -34,6 +34,18 @@ namespace MVCSmallFarm.Controllers
             return View(vm);
         }
 
+        public IActionResult OrderHistory()
+        {
+            var item = _shoppingCart.MyShoppingCart();
+
+            var vm = new ShoppingCartViewModel()
+            {
+                ShoppingCartSV = _shoppingCart,
+                SCTotal = _shoppingCart.Total()
+            };
+            return View(vm);
+        }
+
 
         [HttpGet("/api/AddShoppingCart")]
         public async Task<IActionResult> AddItemToShoppingCart(int id) 
@@ -94,6 +106,31 @@ namespace MVCSmallFarm.Controllers
             
             }
         
+        }
+
+        public async Task<IActionResult> OrderHistorys()
+        {
+            string userid = "555";
+            var oh =  await _shoppingCartRepo.OrderHistory(userid);
+
+            if (oh != null)
+            {
+                for (int i = 0; i < oh.Count; i++)
+                {
+                    if (oh[i].ImageUrl.Length > 0)
+                    {
+                        oh[i].ImageUrl = Url.Content("/wwwroot/img/" + oh[i].ImageUrl);
+                    }
+                    else {
+                        oh[i].ImageUrl = DefaultValue.DefaultImg;
+                    }
+                }
+                return View(oh);
+            }
+            else {
+                return View("NoOrderHistory");
+            }
+           
         }
 
         private int CountItems()

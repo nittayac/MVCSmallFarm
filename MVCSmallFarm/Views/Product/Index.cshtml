@@ -29,24 +29,24 @@
     <div id="tabsecond" class="tab-pane fade">
 
         <partial name="ProductAddEditView.cshtml" />
-
         @*@Html.Partial("PartialAddOrEdit", Model)*@
         @*@await Component.InvokeAsync("ProductAll", new { pgview = 2, flg = ViewBag.ID, Model })*@
 
     </div>
 </div>
 
- @section Scripts
+@section Scripts
 {
     @{
         <partial name="_ValidationScriptsPartial" />
     }
-<script>
- 
-    jQuery(document).ready(function () {
-        Loading(false);
-            $('#tblViewAll').DataTable({
+    <script src="~/Scripts/ScriptProduct.js"></script>
+    <script>
 
+        jQuery(document).ready(function () {
+            Loading(false);
+            $('#tblViewAll').DataTable({
+                ordering: false
             });
         });
 
@@ -64,8 +64,7 @@
             });
             $(".ui-dialog-titlebar").hide();
         }
+    </script>
 
-</script>
-<script src="~/Scripts/ScriptProduct.js"></script>
 
- }
+}

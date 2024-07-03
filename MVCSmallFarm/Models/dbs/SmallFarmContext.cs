@@ -66,15 +66,19 @@ public partial class SmallFarmContext : DbContext
             entity.Property(e => e.OrderId)
                 .HasMaxLength(100)
                 .HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreateDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Email)
                 .IsRequired()
                 .HasMaxLength(30);
             entity.Property(e => e.NetDc).HasColumnName("NetDC");
             entity.Property(e => e.NetVat).HasColumnName("NetVAT");
             entity.Property(e => e.OrderDate).HasColumnType("datetime");
-            entity.Property(e => e.OrderNo).HasMaxLength(30);
+            entity.Property(e => e.OrderNo).ValueGeneratedOnAdd();
             entity.Property(e => e.PaidDate).HasColumnType("datetime");
             entity.Property(e => e.ReceiveDate).HasColumnType("datetime");
+            entity.Property(e => e.UpdateDate).HasColumnType("datetime");
             entity.Property(e => e.UserId).HasMaxLength(50);
             entity.Property(e => e.UserIp)
                 .IsRequired()
@@ -110,14 +114,14 @@ public partial class SmallFarmContext : DbContext
             entity.ToTable("Product");
 
             entity.Property(e => e.CommentTotals).HasDefaultValue(0);
-            entity.Property(e => e.Cost).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Cost).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.CreateDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.ImageUrl).HasMaxLength(100);
             entity.Property(e => e.PointTotals).HasDefaultValue(0);
-            entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.ProductName)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -156,6 +160,9 @@ public partial class SmallFarmContext : DbContext
         {
             entity.ToTable("ShoppingCartItem");
 
+            entity.Property(e => e.CreateDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.ShoppingCartId)
                 .IsRequired()
                 .HasMaxLength(50);

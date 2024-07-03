@@ -1,0 +1,46 @@
+﻿@model List<MVCSmallFarm.ViewModels.OrderHistory>
+<div>
+    <table id="tblorderhistory">
+        <thead>
+            <tr>
+                <th></th>
+                <th>CategoryName</th>
+                <th>ProductName</th>
+                <th>OrderDate</th>
+                <th>Amount</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><img src="@item.ImageUrl" style="margin:10px" height="200" width="200" id="imgpreviewdetail" /></td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.OrderDate</td>
+                    <td>@item.Amount</td>
+                    <td>@item.Price</td>
+                    <td>@item.Total</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+
+        $(document).ready(function () {
+            $('#tblorderhistory').DataTable({
+                ordering: false
+            });
+        });
+    </script>
+
+}

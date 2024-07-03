@@ -13,5 +13,7 @@ public partial class ShoppingCartItem
 
     public string ShoppingCartId { get; set; }
 
+    public DateTime? CreateDate { get; set; }
+
     public virtual Product Product { get; set; }
 }

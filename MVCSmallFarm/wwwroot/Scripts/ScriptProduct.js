@@ -12,10 +12,10 @@
             flg: 1
         },
         success: function (data) {
-            $(document).ready(LoadDatatable);
+            //$(document).ready(LoadDatatable);
             $("#tabfirst").html(data);
-            //LoadDatatable();
-            //alert(data);
+            var table = $('#tblViewAll');
+            TestDataTablesRemove(table);
         }
     }
 
@@ -24,6 +24,31 @@
     await ResetTab(1);
 }
 
+
+
+function TestDataTablesRemove(table) {
+    $(document).ready(function () {
+        //table = $('#tblViewAll');
+        // 1stclear first
+        //if (table != null) {
+        //    $(table).DataTable().clear();
+        //    $(table).DataTable().destroy();
+        //    //tableObj.clear();
+        //    //tableObj.destroy();
+        //}
+
+        //2nd empty html
+        //$(tableId + " tbody").empty();
+        //$(tableId + " thead").empty();
+
+        //3rd reCreate Datatable object
+        $(table).DataTable({
+            "autoWidth": false,
+            ordering: false
+        });
+
+    });
+}
 
 async function ReloadProductAddEditViewComponent(id, edit) {
     if (edit.toLowerCase() == 'edit') {
@@ -207,8 +232,8 @@ function SubmitForm(form) {
 
                     setTimeout(
                         function () {
-                            ReloadProductAddEditViewComponent(0, "reset");  // Code in View/Product/Index.cshtml
-                            ReloadEventViewComponent();                     // Code in View/Product/Index.cshtml
+                            ReloadProductAddEditViewComponent(0, "reset");  
+                            ReloadEventViewComponent();                     
                         }, 2000
                     );
 
