@@ -64,16 +64,16 @@
 
                     <ul class="navbar-nav flex-grow-1">
                         <li class="@(pageUrl.ToLower().Contains("/index") ? "nav_selected" : string.Empty) setBtnMargin">
-                            <a href="@Url.Action("Index", "Home")" class="btn btn-outline-primary">Home3 </a>
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-outline-primary">Home</a>
                         </li>
-                        <li class="@(pageUrl.ToLower().Contains("/privacy") ? "nav_selected" : string.Empty) setBtnMargin">
-                            <a href="@Url.Action("Privacy", "Home")" class="btn btn-outline-primary">Privacy3 </a>
+                        <li class="@(pageUrl.ToLower().Contains("/category") ? "nav_selected" : string.Empty) setBtnMargin">
+                            <a href="@Url.Action("Index", "Category")" class="btn btn-outline-primary">Manage Category</a>
                         </li>
                         <li class="@(pageUrl.ToLower().Contains("/product") ? "nav_selected" : string.Empty) setBtnMargin">
-                            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-primary">Product3 </a>
+                            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-primary">Manage Product</a>
                         </li>
                         <li class="@(pageUrl.ToLower().Contains("/shoppingcart/orderhistorys") ? "nav_selected" : string.Empty) setBtnMargin">
-                            <a href="@Url.Action("OrderHistorys", "ShoppingCart")" class="btn btn-outline-primary">OrderHistorys3 </a>
+                            <a href="@Url.Action("OrderHistorys", "ShoppingCart")" class="btn btn-outline-primary">OrderHistorys</a>
                         </li>
                     </ul>
 

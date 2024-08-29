@@ -1,0 +1,38 @@
+﻿@model List<MVCSmallFarm.ViewModels.CategoryViewModel>
+
+<table class="table text-light" id="tblCatViewAll">
+    <thead>
+        <tr>
+            <th>CategoryName</th>
+            <th>Description</th>
+            <th>IsActive</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CategoryName</td>
+                    <td>@item.Description</td>
+                    <td>
+
+                        @if (@item.IsActive)
+                        {
+                            <a class="btn btn-outline-primary" title="InActive" id="btnActive" onclick='confirmSubmitJQ("@item.CategoryId","Do you want to inactive category :@item.CategoryName"+"?","/Category/CateAddEdit","       InActive......\n\nPlease wait")'>Active</a>
+
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-danger" title="Active" id="btnInActive" onclick='confirmSubmitJQ("@item.CategoryId","Do you want to active category :@item.CategoryName"+"?","/Category/CateAddEdit","       Active......\n\nPlease wait")'>InActive</a>
+                        }
+
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>

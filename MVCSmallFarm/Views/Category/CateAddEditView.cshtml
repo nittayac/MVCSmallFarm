@@ -1,0 +1,66 @@
+﻿@model MVCSmallFarm.ViewModels.CategoryViewModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+<input type="hidden" id="RequestVerificationToken"
+       name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
+<h4>Partial Component ProductCatViewModel</h4>
+<hr />
+<div id="response"></div>
+@using (Html.BeginForm("CateAddEditView", "Category", FormMethod.Post, new { id = "frmCat", onSubmit = "return SubmitForm(this);" }))
+{
+
+
+    @*<form asp-action="PartialAddOrEdit" asp-controller="Product"  method="post" enctype="multipart/form-data">*@
+    <div class="row">
+        <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<input id="viewedit" type="hidden" value="@ViewData["Edit"]" />*@
+            @if (Model != null)
+            {
+                <input type="hidden" asp-for="CategoryId" />
+            }
+            <div class="form-group">
+                <label asp-for="CategoryName" class="control-label">Product Name</label>
+                <input asp-for="CategoryName" class="form-control" />
+                <span asp-validation-for="CategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Description</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <input class="form-check-input" type="checkbox" asp-for="IsActive" /> 
+                <label class="form-check-label text-black">Active</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <div class="mt-5">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <a class="btn btn-info" onclick="return jQueryAjaxReset(document.getElementById('frmCat'));">Reset</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@*</form>*@
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}
