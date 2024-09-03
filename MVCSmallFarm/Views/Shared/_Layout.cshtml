@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http;
+@using MVCSmallFarm.Config;
 @using Microsoft.AspNetCore.Http.Extensions;
 @{
     var data = Context.Session.GetString("cart");
@@ -75,6 +76,15 @@
                         <li class="@(pageUrl.ToLower().Contains("/shoppingcart/orderhistorys") ? "nav_selected" : string.Empty) setBtnMargin">
                             <a href="@Url.Action("OrderHistorys", "ShoppingCart")" class="btn btn-outline-primary">OrderHistorys</a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole(RoleName.Admin))
+                            {
+                                <li class="@(pageUrl.ToLower().Contains("/admin/dashboard") ? "nav_selected" : string.Empty) setBtnMargin">
+                                    <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-outline-primary">Admin</a>
+                                </li>
+                            }
+                        }
                     </ul>
 
                     <ul class="navbar-nav ms-auto">
@@ -92,6 +102,35 @@
                     </ul>
                 </div>
             </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                        @User.Identity.Name
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" asp-controller="Member" asp-action="Index">Profile</a></li>
+                        <li><a class="dropdown-item" asp-controller="Member" asp-action="ChangePassword">Change Password</a></li>
+                        <li>
+                            <a class="dropdown-item" asp-controller="Account" asp-action="EnableAuthenucator">Open Two Factor</a>
+                        </li>
+                    </ul>
+                </div>
+                <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">Logout</a>
+            }
+            else
+            {
+                <div class="collapse navbar-collapse" id="navMain">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login </a>
+                        </li>
+                    </ul>
+                </div>
+            }
         </nav>
     </header>
     <div class="container">
