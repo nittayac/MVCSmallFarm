@@ -7,6 +7,9 @@ using Newtonsoft.Json.Serialization;
 using MVCSmallFarm.ViewModels;
 using MVCSmallFarm.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Identity;
+using MVCSmallFarm.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,10 @@ builder.Services.AddDbContext<SmallFarmContext>(
 //          opts.SerializerSettings.ContractResolver = null;
 
 //      });
+
+builder.Services.AddIdentity<ApplicationUsers, IdentityRole>()
+    .AddEntityFrameworkStores<SmallFarmContext>()
+    .AddDefaultTokenProviders();
 
 
 builder.Services.AddMemoryCache();  //Using session
@@ -68,8 +75,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.UseSession(); //Using session ::must call before app.MapControllerRoute
 

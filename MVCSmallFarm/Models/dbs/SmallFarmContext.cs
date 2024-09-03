@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MVCSmallFarm.Config;
 
 namespace MVCSmallFarm.Models.dbs;
 
-public partial class SmallFarmContext : DbContext
+public partial class SmallFarmContext : IdentityDbContext<ApplicationUsers>
+//public partial class SmallFarmContext : DbContext
 {
     public SmallFarmContext()
     {
@@ -42,6 +46,13 @@ public partial class SmallFarmContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<IdentityRole>().HasData(
+            new { Id = Guid.NewGuid().ToString(), Name = RoleName.Admin, NormalizedName = RoleName.Admin.ToUpper() },
+            new { Id = Guid.NewGuid().ToString(), Name = RoleName.Member, NormalizedName = RoleName.Member.ToUpper() }
+            );
+
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.ToTable("Category");
